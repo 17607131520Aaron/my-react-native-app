@@ -39,13 +39,9 @@ export const get = <T = unknown>(url: string): Promise<ApiResponse<T>> => {
 /**
  * POST 请求
  */
-export const post = <T = unknown>(
-  url: string,
-  body?: unknown,
-): Promise<ApiResponse<T>> => {
+export const post = <T = unknown>(url: string, body?: unknown): Promise<ApiResponse<T>> => {
   return request<T>(url, {
     method: 'POST',
     body: JSON.stringify(body),
   });
 };
-

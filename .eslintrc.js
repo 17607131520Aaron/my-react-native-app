@@ -1,7 +1,5 @@
 /**
  * ESLint 配置文件
- * 参考蚂蚁金服、阿里巴巴、字节跳动等大厂前端规范
- * 针对 React Native 项目优化
  */
 module.exports = {
   root: true,
@@ -34,7 +32,7 @@ module.exports = {
     'react',
     'react-hooks',
     'react-native',
-    'import', // 顶级团队常用：导入排序和检查
+    'import', // 导入排序和检查
     'prettier',
   ],
   settings: {
@@ -78,14 +76,12 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off', // 保持关闭，TypeScript 会推断
     '@typescript-eslint/no-empty-function': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'error', // 禁止非空断言，更安全
-    // 以下规则需要类型信息，暂时禁用以避免性能问题
-    // '@typescript-eslint/prefer-nullish-coalescing': 'error', // 优先使用 ??
-    // '@typescript-eslint/prefer-optional-chain': 'error', // 优先使用可选链
-    // 以下规则需要类型信息，暂时禁用以避免性能问题
-    // '@typescript-eslint/no-unnecessary-type-assertion': 'error', // 禁止不必要的类型断言
-    // '@typescript-eslint/no-floating-promises': 'error', // 禁止未处理的 Promise
-    // '@typescript-eslint/await-thenable': 'error', // 禁止 await 非 Promise
-    // '@typescript-eslint/no-misused-promises': 'error', // 禁止 Promise 误用
+    '@typescript-eslint/prefer-nullish-coalescing': 'error', // 优先使用 ??
+    '@typescript-eslint/prefer-optional-chain': 'error', // 优先使用可选链
+    '@typescript-eslint/no-unnecessary-type-assertion': 'error', // 禁止不必要的类型断言
+    '@typescript-eslint/no-floating-promises': 'error', // 禁止未处理的 Promise
+    '@typescript-eslint/await-thenable': 'error', // 禁止 await 非 Promise
+    '@typescript-eslint/no-misused-promises': 'error', // 禁止 Promise 误用
     '@typescript-eslint/ban-ts-comment': [
       'error',
       {
@@ -145,14 +141,24 @@ module.exports = {
       'error',
       {
         props: true,
-        ignorePropertyModificationsFor: ['state', 'acc', 'e', 'ctx', 'req', 'request', 'res', 'response', '$scope'],
+        ignorePropertyModificationsFor: [
+          'state',
+          'acc',
+          'e',
+          'ctx',
+          'req',
+          'request',
+          'res',
+          'response',
+          '$scope',
+        ],
       },
     ],
     'no-nested-ternary': 'error', // 严格禁止嵌套三元运算符
     'no-unneeded-ternary': 'error',
     'spaced-comment': ['error', 'always', { markers: ['/'] }],
-    'eqeqeq': ['error', 'always', { null: 'ignore' }],
-    'curly': ['error', 'all'],
+    eqeqeq: ['error', 'always', { null: 'ignore' }],
+    curly: ['error', 'all'],
     'brace-style': ['error', '1tbs', { allowSingleLine: true }],
     'no-implicit-coercion': 'error', // 禁止隐式类型转换
     'no-await-in-loop': 'error', // 禁止在循环中使用 await
@@ -183,7 +189,7 @@ module.exports = {
         allowSeparatedGroups: true,
       },
     ],
-    // eslint-plugin-import 规则（顶级团队必备）
+    // eslint-plugin-import 规则
     'import/order': [
       'error',
       {
@@ -269,7 +275,6 @@ module.exports = {
       },
     ],
 
-    // 顶级团队常用规则（补充）
     'no-void': 'error', // 禁止 void 操作符
     'no-labels': 'error', // 禁止标签语句
     'no-eval': 'error', // 禁止 eval
@@ -297,7 +302,7 @@ module.exports = {
     ],
     // 暂时禁用 no-magic-numbers，配置选项不兼容
     // 'no-magic-numbers': 'off',
-    'complexity': ['warn', { max: 20 }], // 限制圈复杂度
+    complexity: ['warn', { max: 20 }], // 限制圈复杂度
     'max-depth': ['warn', { max: 5 }], // 限制嵌套深度
     'max-lines-per-function': [
       'warn',
