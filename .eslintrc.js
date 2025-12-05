@@ -12,11 +12,11 @@ module.exports = {
     jest: true,
   },
   extends: [
-    '@react-native', // React Native 官方推荐配置
+    '@react-native', // React Native 官方推荐配置（已包含 react-native 规则）
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:react-native/recommended', // 使用 recommended 而非 all，更灵活
+    // 注意：@react-native 已包含 react-native 规则，不需要单独添加
     'prettier', // 必须放在最后，覆盖其他配置
   ],
   parser: '@typescript-eslint/parser',
@@ -78,12 +78,14 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off', // 保持关闭，TypeScript 会推断
     '@typescript-eslint/no-empty-function': 'warn',
     '@typescript-eslint/no-non-null-assertion': 'error', // 禁止非空断言，更安全
-    '@typescript-eslint/prefer-nullish-coalescing': 'error', // 优先使用 ??
-    '@typescript-eslint/prefer-optional-chain': 'error', // 优先使用可选链
-    '@typescript-eslint/no-unnecessary-type-assertion': 'error', // 禁止不必要的类型断言
-    '@typescript-eslint/no-floating-promises': 'error', // 禁止未处理的 Promise
-    '@typescript-eslint/await-thenable': 'error', // 禁止 await 非 Promise
-    '@typescript-eslint/no-misused-promises': 'error', // 禁止 Promise 误用
+    // 以下规则需要类型信息，暂时禁用以避免性能问题
+    // '@typescript-eslint/prefer-nullish-coalescing': 'error', // 优先使用 ??
+    // '@typescript-eslint/prefer-optional-chain': 'error', // 优先使用可选链
+    // 以下规则需要类型信息，暂时禁用以避免性能问题
+    // '@typescript-eslint/no-unnecessary-type-assertion': 'error', // 禁止不必要的类型断言
+    // '@typescript-eslint/no-floating-promises': 'error', // 禁止未处理的 Promise
+    // '@typescript-eslint/await-thenable': 'error', // 禁止 await 非 Promise
+    // '@typescript-eslint/no-misused-promises': 'error', // 禁止 Promise 误用
     '@typescript-eslint/ban-ts-comment': [
       'error',
       {
@@ -159,6 +161,16 @@ module.exports = {
     'no-return-await': 'error', // 禁止不必要的 return await
     'prefer-promise-reject-errors': 'error', // Promise reject 必须使用 Error
     'no-throw-literal': 'error', // 禁止抛出字面量，必须抛出 Error
+    'no-multiple-empty-lines': [
+      'error',
+      {
+        max: 1, // 最多允许 1 个连续空行
+        maxEOF: 1, // 文件末尾最多 1 个空行
+        maxBOF: 0, // 文件开头不允许空行
+      },
+    ], // 禁止多个连续空行
+    'no-trailing-spaces': 'error', // 禁止行尾空格
+    'eol-last': ['error', 'always'], // 文件末尾必须有空行
 
     // Import 相关规则（顶级团队标准）
     'sort-imports': [
@@ -283,18 +295,8 @@ module.exports = {
         enforceInMethodNames: true,
       },
     ],
-    'no-magic-numbers': [
-      'warn',
-      {
-        ignore: [-1, 0, 1, 2], // 允许常见的数字
-        ignoreArrayIndexes: true,
-        ignoreDefaultValues: true,
-        ignoreNumericLiteralTypes: true,
-        ignoreReadonlyClassProperties: true,
-        ignoreEnums: true,
-        detectObjects: false,
-      },
-    ],
+    // 暂时禁用 no-magic-numbers，配置选项不兼容
+    // 'no-magic-numbers': 'off',
     'complexity': ['warn', { max: 20 }], // 限制圈复杂度
     'max-depth': ['warn', { max: 5 }], // 限制嵌套深度
     'max-lines-per-function': [

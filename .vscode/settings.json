@@ -2,11 +2,14 @@
   // ========== 编辑器基础设置 ==========
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // 确保保存时删除多余空行和空格
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
@@ -63,8 +66,12 @@
 
   // ========== Prettier 配置 ==========
   "prettier.enable": true,
-  "prettier.requireConfig": true,
+  "prettier.requireConfig": false, // 改为 false，即使没有配置文件也启用
   "prettier.useEditorConfig": false,
+  "prettier.configPath": ".prettierrc.js",
+  "prettier.ignorePath": ".prettierignore",
+  "prettier.resolveGlobalModules": false,
+  "prettier.documentSelectors": ["**/*.{js,jsx,ts,tsx,json,css,scss,md}"],
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -155,13 +162,6 @@
   // ========== 文件管理 ==========
   // 文件嵌套：完全禁用，所有文件平铺显示
   "explorer.fileNesting.enabled": false,
-  // 如果需要启用文件嵌套，可以使用以下配置：
-  // "explorer.fileNesting.enabled": true,
-  // "explorer.fileNesting.patterns": {
-  //   "*.ts": "${capture}.js",
-  //   "*.tsx": "${capture}.jsx",
-  //   "tsconfig.json": "tsconfig.*.json"
-  // }
 
   // ========== Git 配置 ==========
   "git.enableSmartCommit": true,

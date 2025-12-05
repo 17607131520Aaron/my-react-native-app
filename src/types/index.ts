@@ -9,6 +9,7 @@ export interface UserInfo {
   name: string;
   email: string;
   avatar?: string;
+
 }
 
 // 示例：API 响应类型

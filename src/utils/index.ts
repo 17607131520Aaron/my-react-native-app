@@ -8,6 +8,10 @@
  */
 export const formatDate = (date: Date | string | number): string => {
   const d = new Date(date);
+
+
+
+
   return d.toLocaleDateString('zh-CN');
 };
 
@@ -25,6 +29,8 @@ export const debounce = <T extends (...args: unknown[]) => unknown>(
       clearTimeout(timeout);
     }
     timeout = setTimeout(() => {
+
+
       func(...args);
     }, wait);
   };
