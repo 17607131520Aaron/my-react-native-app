@@ -1,5 +1,84 @@
 {
   "extends": "@react-native/typescript-config",
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["**/node_modules", "**/Pods"]
+  "compilerOptions": {
+    // 严格模式（顶级团队标准）
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    // 代码质量检查
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitReturns": true,
+
+    // 模块解析（顶级团队标准）
+    // 注意：moduleResolution 由 @react-native/typescript-config 继承，保持兼容
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+
+    // 类型检查
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // JSX 配置
+    "jsx": "react-native",
+
+    // 路径别名（顶级团队常用，简化导入路径）
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@pages/*": ["src/pages/*"],
+      "@components/*": ["src/components/*"],
+      "@navigation/*": ["src/navigation/*"],
+      "@services/*": ["src/services/*"],
+      "@stores/*": ["src/stores/*"],
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"],
+      "@constants/*": ["src/constants/*"]
+    },
+
+    // 输出配置
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true,
+
+    // 语言特性
+    "target": "ES2021",
+    "lib": ["ES2021", "ES2022", "DOM"],
+    "module": "commonjs",
+    "allowJs": true,
+
+    // 其他选项
+    "incremental": true,
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "index.js",
+    "*.config.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "**/Pods",
+    "android",
+    "ios",
+    "build",
+    "dist",
+    "coverage",
+    "*.config.js",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
 }
