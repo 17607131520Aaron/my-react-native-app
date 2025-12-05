@@ -1,10 +1,24 @@
-import React from "react";
-import {View,Text} from "react-native"
+/**
+ * App 入口组件
+ */
 
-const App=()=>{
-    <View>
-        <Text>my-react-native-app</Text>
-    </View>
+import React from 'react';
+import { StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import RootNavigator from '@/router';
+
+function App() {
+  const isDarkMode = useColorScheme() === 'dark';
+
+  return (
+    <SafeAreaProvider>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
 }
 
-export default App
+export default App;
