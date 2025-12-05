@@ -1,0 +1,107 @@
+{
+  // ============================================
+  // 推荐的 VS Code 扩展
+  // 顶级前端团队常用扩展列表
+  // ============================================
+  "recommendations": [
+    // ========== 必需扩展（核心工具） ==========
+    {
+      "id": "esbenp.prettier-vscode",
+      "reason": "代码格式化工具，必需"
+    },
+    {
+      "id": "dbaeumer.vscode-eslint",
+      "reason": "ESLint 集成，代码质量检查"
+    },
+    {
+      "id": "ms-vscode.vscode-typescript-next",
+      "reason": "TypeScript 最新特性支持"
+    },
+
+    // ========== React Native 开发 ==========
+    {
+      "id": "msjsdiag.vscode-react-native",
+      "reason": "React Native 开发工具"
+    },
+    {
+      "id": "dsznajder.es7-react-js-snippets",
+      "reason": "React/React Native 代码片段"
+    },
+
+    // ========== 代码质量 ==========
+    {
+      "id": "bradlc.vscode-tailwindcss",
+      "reason": "CSS 类名智能提示（如使用 Tailwind）"
+    },
+    {
+      "id": "usernamehw.errorlens",
+      "reason": "行内错误提示增强"
+    },
+    {
+      "id": "streetsidesoftware.code-spell-checker",
+      "reason": "拼写检查"
+    },
+
+    // ========== Git 工具 ==========
+    {
+      "id": "eamodio.gitlens",
+      "reason": "Git 增强工具，代码历史查看"
+    },
+    {
+      "id": "mhutchie.git-graph",
+      "reason": "Git 图形化界面"
+    },
+
+    // ========== 代码增强 ==========
+    {
+      "id": "formulahendry.auto-rename-tag",
+      "reason": "自动重命名标签"
+    },
+    {
+      "id": "christian-kohler.path-intellisense",
+      "reason": "路径智能提示"
+    },
+    {
+      "id": "christian-kohler.npm-intellisense",
+      "reason": "npm 模块智能提示"
+    },
+    {
+      "id": "ms-vscode.vscode-json",
+      "reason": "JSON 文件支持"
+    },
+
+    // ========== 主题和界面（可选） ==========
+    {
+      "id": "pkief.material-icon-theme",
+      "reason": "Material 图标主题"
+    },
+    {
+      "id": "zhuangtongfa.material-theme",
+      "reason": "Material 主题"
+    },
+
+    // ========== 调试工具 ==========
+    {
+      "id": "ms-vscode.vscode-js-debug",
+      "reason": "JavaScript 调试器"
+    },
+
+    // ========== 文档和注释 ==========
+    {
+      "id": "aaron-bond.better-comments",
+      "reason": "更好的注释高亮"
+    },
+
+    // ========== 性能工具 ==========
+    {
+      "id": "ms-vscode.vscode-typescript-next",
+      "reason": "TypeScript 性能优化"
+    }
+  ],
+  "unwantedRecommendations": [
+    // 不推荐的扩展（避免冲突）
+    "hookyqr.beautify",
+    "ms-vscode.vscode-typescript"
+  ]
+}
+
