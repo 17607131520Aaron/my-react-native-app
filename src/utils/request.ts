@@ -3,6 +3,7 @@ import request from 'axios';
 import { APP_CONFIG, getApiConfig } from '~/common/config';
 import { addNetworkListener, isNetworkConnected } from '~/utils/network';
 
+import { logger } from './logger';
 import { getStorageItem } from './storage';
 
 import type { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
@@ -106,12 +107,14 @@ instance.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (error) {
-      console.error('Error getting token from storage:', error);
+      logger.error('Error getting token from storage', { error: String(error) });
     }
 
     // 添加请求日志
-
-    console.log(`🚀 [API] ${config.method?.toUpperCase()} ${config.url}`);
+    logger.info(`API Request: ${config.method?.toUpperCase()} ${config.url}`, {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+    });
 
     return config;
   },
@@ -124,18 +127,18 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: AxiosResponse) => {
     // 添加响应日志
-    console.log(
-      `✅ [API] ${response.config.method?.toUpperCase()} ${response.config.url} - ${
-        response.status
-      }`,
-    );
+    logger.info(`API Response: ${response.config.method?.toUpperCase()} ${response.config.url}`, {
+      method: response.config.method?.toUpperCase(),
+      url: response.config.url,
+      status: response.status,
+    });
 
     // 计算请求耗时
     const requestTime = response.headers['x-request-time'];
     if (requestTime) {
       const responseTime = new Date().getTime();
       const duration = responseTime - parseInt(requestTime, 10);
-      console.log(`⏱️ [API] Request took ${duration}ms`);
+      logger.info(`API Request duration`, { duration: `${duration}ms` });
     }
 
     return response;
@@ -143,14 +146,18 @@ instance.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response) {
       const { status, data, config } = error.response;
-      console.error(`❌ [API] ${config.method?.toUpperCase()} ${config.url} - ${status}`);
+      logger.error(`API Error: ${config.method?.toUpperCase()} ${config.url}`, {
+        method: config.method?.toUpperCase(),
+        url: config.url,
+        status,
+      });
 
       handleError(status, data as IResponse);
     } else if (error.request) {
-      console.error(`❌ [API] Network Error: ${error.message}`);
+      logger.error('API Network Error', { message: error.message });
       // ToastView.add('网络错误，请检查您的网络连接');
     } else {
-      console.error(`❌ [API] Request Error: ${error.message}`);
+      logger.error('API Request Error', { message: error.message });
       // ToastView.add('请求错误，请稍后重试');
     }
     return Promise.reject(error);

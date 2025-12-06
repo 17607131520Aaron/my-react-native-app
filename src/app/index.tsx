@@ -5,12 +5,13 @@
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 
-import { initEnvironment } from '~/common/config';
-import LoginPage from '~/pages/Login';
+import colors from '~/common/colors';
+import { ErrorBoundary } from '~/components/shared';
 import { useUserStore } from '~/store';
+import { ThemeProvider } from '~/theme';
 
 import { getTabsByRole } from './tabConfigs';
 
@@ -28,28 +29,13 @@ const Tab = createBottomTabNavigator<TMainTabParamList>();
 
 const defaultTabScreenOptions = {
   headerShown: false,
-  tabBarActiveTintColor: '#007AFF',
-  tabBarInactiveTintColor: '#8E8E93',
+  tabBarActiveTintColor: colors.tabActive,
+  tabBarInactiveTintColor: colors.tabInactive,
 };
 
-// ==================== 主应用组件 ====================
-const App = (): React.JSX.Element => {
-  const { isAuthenticated, role } = useUserStore();
-
-  useEffect(() => {
-    initEnvironment().catch((error) => {
-      console.error('Failed to initialize environment:', error);
-    });
-  }, []);
-
-  // 未登录显示登录页
-  if (!isAuthenticated) {
-    return (
-      <NavigationContainer>
-        <LoginPage />
-      </NavigationContainer>
-    );
-  }
+// ==================== 主应用内容组件 ====================
+const AppContent = (): React.JSX.Element => {
+  const { role } = useUserStore();
 
   // 已登录根据角色显示对应的底部导航
   const tabs = getTabsByRole(role);
@@ -72,6 +58,17 @@ const App = (): React.JSX.Element => {
         ))}
       </Tab.Navigator>
     </NavigationContainer>
+  );
+};
+
+// ==================== 主应用组件 ====================
+const App = (): React.JSX.Element => {
+  return (
+    <ErrorBoundary>
+      <ThemeProvider>
+        <AppContent />
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 };
 
