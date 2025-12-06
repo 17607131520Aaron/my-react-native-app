@@ -38,6 +38,7 @@
     "react-native-marquee-ab": "^1.2.6",
     "react-native-modal": "14.0.0-rc.1",
     "react-native-pager-view": "^7.0.2",
+    "react-native-permissions": "^5.4.4",
     "react-native-qrcode-svg": "^6.3.21",
     "react-native-root-siblings": "^5.0.1",
     "react-native-safe-area-context": "^5.5.2",

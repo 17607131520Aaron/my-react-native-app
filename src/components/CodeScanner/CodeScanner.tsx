@@ -4,14 +4,23 @@
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 
 import ScanFrame from './ScanFrame';
 import { useCodeScanner } from './useCodeScanner';
 import { useScannerLifecycle } from './useScannerLifecycle';
 
 import type { ICodeScannerProps } from './types';
+import type { Permission } from 'react-native-permissions';
+
+// 根据平台获取相机权限
+const CAMERA_PERMISSION: Permission = Platform.select({
+  ios: PERMISSIONS.IOS.CAMERA,
+  android: PERMISSIONS.ANDROID.CAMERA,
+  default: PERMISSIONS.ANDROID.CAMERA,
+});
 
 /**
  * 用于扫描二维码和条形码的 CodeScanner 组件
@@ -45,18 +54,60 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
 
   // 组件挂载时请求相机权限
   useEffect(() => {
-    const requestPermission = async (): Promise<void> => {
+    const requestCameraPermission = async (): Promise<void> => {
       try {
-        // react-native-camera-kit 内部处理权限
-        // 我们只需要检查是否可用
-        setHasPermission(true);
-      } catch {
+        // 首先检查当前权限状态
+        const currentStatus = await check(CAMERA_PERMISSION);
+
+        switch (currentStatus) {
+          case RESULTS.GRANTED:
+            // 权限已授予
+            setHasPermission(true);
+            break;
+
+          case RESULTS.DENIED: {
+            // 权限未请求过，请求权限
+            const requestResult = await request(CAMERA_PERMISSION);
+            if (requestResult === RESULTS.GRANTED) {
+              setHasPermission(true);
+            } else {
+              setHasPermission(false);
+              onPermissionDenied?.();
+            }
+            break;
+          }
+
+          case RESULTS.BLOCKED:
+            // 权限被永久拒绝，需要引导用户去设置
+            setHasPermission(false);
+            onPermissionDenied?.();
+            // 可选：打开设置页面
+            // Linking.openSettings();
+            break;
+
+          case RESULTS.UNAVAILABLE:
+            // 设备不支持相机
+            setHasPermission(false);
+            onPermissionDenied?.();
+            break;
+
+          case RESULTS.LIMITED:
+            // iOS 14+ 有限访问（对于相机通常等同于授权）
+            setHasPermission(true);
+            break;
+
+          default:
+            setHasPermission(false);
+            onPermissionDenied?.();
+        }
+      } catch (error) {
+        console.error('Camera permission error:', error);
         setHasPermission(false);
         onPermissionDenied?.();
       }
     };
 
-    requestPermission();
+    requestCameraPermission();
   }, [onPermissionDenied]);
 
   /**

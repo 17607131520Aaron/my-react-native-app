@@ -6094,6 +6094,11 @@ react-native-pager-view@^7.0.2:
   resolved "https://registry.npmmirror.com/react-native-pager-view/-/react-native-pager-view-7.0.2.tgz#96f2042631f413dd37a601b9182fdfa8305e7d5c"
   integrity sha512-yj/v6BN/WGuV1VBVWaCjYOjQlhTaqJs4Ocismw0XRSsHGqO2wuQdWF8it5iFnfibQVBBED0/GC7qKOlQ4FBzNg==
 
+react-native-permissions@^5.4.4:
+  version "5.4.4"
+  resolved "https://registry.npmmirror.com/react-native-permissions/-/react-native-permissions-5.4.4.tgz#8a63b001fc0f9e88426c36b21a6fe379c4533b04"
+  integrity sha512-WB5lRCBGXETfuaUhem2vgOceb9+URCeyfKpLGFSwoOffLuyJCA6+NTR3l1KLkrK4Ykxsig37z16/shUVufmt7A==
+
 react-native-qrcode-svg@^6.3.21:
   version "6.3.21"
   resolved "https://registry.npmmirror.com/react-native-qrcode-svg/-/react-native-qrcode-svg-6.3.21.tgz#af873cf8e5b9fc68315a2c267ff6563d55c56abb"
