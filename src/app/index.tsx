@@ -5,10 +5,11 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { ErrorBoundary, NavigationBar } from '~/components/shared';
-import { getAllRoutes, type IRootStackParamList } from '~/routers';
+import { ErrorBoundary, NavigationBar, SplashScreen } from '~/components/shared';
+import { getAllRoutes, type IRootStackParamList, IRouteConfig } from '~/routers';
 import { navigationRef } from '~/routers/navigation';
 import { ThemeProvider } from '~/theme';
 
@@ -35,7 +36,30 @@ const defaultScreenOptions: NativeStackNavigationOptions = {
 
 // ==================== 主应用内容组件 ====================
 const AppContent = (): React.JSX.Element => {
-  const allRoutes = getAllRoutes();
+  const [isReady, setIsReady] = useState(false);
+  const [routes, setRoutes] = useState<IRouteConfig[]>([]);
+
+  useEffect(() => {
+    // 延迟初始化路由，确保所有模块加载完成
+    const initApp = async (): Promise<void> => {
+      try {
+        // 获取所有路由
+        const allRoutes = getAllRoutes();
+        setRoutes(allRoutes);
+        setIsReady(true);
+      } catch (error) {
+        console.error('App initialization error:', error);
+        setIsReady(true);
+      }
+    };
+
+    initApp();
+  }, []);
+
+  // 显示启动屏
+  if (!isReady) {
+    return <SplashScreen appName='仓储管理' subtitle='智能仓储解决方案' />;
+  }
 
   return (
     <NavigationContainer ref={navigationRef}>
@@ -48,7 +72,7 @@ const AppContent = (): React.JSX.Element => {
         />
 
         {/* 动态注册所有其他页面 */}
-        {allRoutes.map((route) => (
+        {routes.map((route) => (
           <RootStack.Screen
             key={route.name}
             component={route.component}
@@ -64,11 +88,13 @@ const AppContent = (): React.JSX.Element => {
 // ==================== 主应用组件 ====================
 const App = (): React.JSX.Element => {
   return (
-    <ErrorBoundary>
-      <ThemeProvider>
-        <AppContent />
-      </ThemeProvider>
-    </ErrorBoundary>
+    <SafeAreaProvider>
+      <ErrorBoundary>
+        <ThemeProvider>
+          <AppContent />
+        </ThemeProvider>
+      </ErrorBoundary>
+    </SafeAreaProvider>
   );
 };
 

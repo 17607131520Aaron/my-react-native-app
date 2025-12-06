@@ -12,7 +12,13 @@ export {
 
 export {
   NavigationBar,
+  withNavigationBar,
+  useNavigationBar,
   type INavigationBarProps,
   type INavBarButton,
   type INavBarSearchConfig,
+  type IWithNavigationBarProps,
+  type IBackIconConfig,
 } from './NavigationBar';
+
+export { SplashScreen, type ISplashScreenProps } from './SplashScreen';
