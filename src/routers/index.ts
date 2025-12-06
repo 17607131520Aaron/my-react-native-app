@@ -14,7 +14,8 @@ import type { ComponentType } from 'react';
 // ==================== 路由配置类型 ====================
 export interface IRouteConfig {
   name: keyof IAllRoutesParamList;
-  component: ComponentType<unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any>;
   options?: NativeStackNavigationOptions;
 }
 
@@ -111,7 +112,7 @@ export type {
   EngineerStackParamList,
   IAllRoutesParamList,
   IEngineerStackParamList,
-  IInstitutionStackParamList,
+  INstitutionStackParamList,
   IMineStackParamList,
   InstitutionStackParamList,
   IRootStackParamList,

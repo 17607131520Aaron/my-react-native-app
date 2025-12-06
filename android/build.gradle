@@ -28,6 +28,13 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/public' }
         google()
         mavenCentral()
+        // 为兼容旧版库（如 @react-native-cookies/cookies）添加 jcenter
+        jcenter() {
+            content {
+                // 仅允许特定依赖使用 jcenter
+                includeModule("com.facebook.react", "react-native-cookies")
+            }
+        }
     }
 }
 

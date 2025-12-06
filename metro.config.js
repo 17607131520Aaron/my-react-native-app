@@ -20,7 +20,7 @@ const config = {
     }),
   },
   server: {
-    port: 8088, // 您可以修改这里的端口号为任何您想要的值
+    port: 8081, // 您可以修改这里的端口号为任何您想要的值
   },
   resolver: {
     sourceExts: ['js', 'ts', 'tsx', 'svg', 'json'],

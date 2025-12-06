@@ -14,7 +14,7 @@ export interface IEngineerStackParamList {
 }
 
 // ==================== Institution 模块路由 ====================
-export interface IInstitutionStackParamList {
+export interface InstitutionStackParamList {
   InstitutionHome: undefined; // 机构首页
   InstitutionList: { filter?: string }; // 机构列表
   InstitutionDetail: { institutionId: string }; // 机构详情
@@ -38,13 +38,13 @@ export interface IMineStackParamList {
  */
 export interface IAllRoutesParamList
   extends IEngineerStackParamList,
-    IInstitutionStackParamList,
+    InstitutionStackParamList,
     IMineStackParamList {}
 
 // ==================== 根路由参数 ====================
 export interface IRootStackParamList {
   Engineer: NavigatorScreenParams<IEngineerStackParamList>;
-  Institution: NavigatorScreenParams<IInstitutionStackParamList>;
+  Institution: NavigatorScreenParams<InstitutionStackParamList>;
   Mine: NavigatorScreenParams<IMineStackParamList>;
   // 公共页面可以直接在根路由中定义
   Login: undefined;
@@ -91,7 +91,7 @@ export type AllRoutesParamList = IAllRoutesParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type EngineerStackParamList = IEngineerStackParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type InstitutionStackParamList = IInstitutionStackParamList;
+export type INstitutionStackParamList = InstitutionStackParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type MineStackParamList = IMineStackParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention

@@ -14,7 +14,8 @@ import type { ComponentType } from 'react';
  */
 export interface IInstitutionRouteConfig {
   name: keyof IInstitutionStackParamList;
-  component: ComponentType<unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any>;
   options?: NativeStackNavigationOptions;
 }
 
