@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "updateApp": "python script/update_app.py"
+    "updateApp": "python scripts/update_app.py"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
