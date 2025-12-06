@@ -23,17 +23,11 @@ export interface IAppState extends Record<string, unknown> {
 }
 
 /** 应用 Store */
-export const useAppStore = createCommonStore<IAppState>(
-  'app',
-  (set) => ({
-    theme: 'system',
-    language: 'zh-CN',
-    setTheme: (theme) => set({ theme }),
-    setLanguage: (language) => set({ language }),
-  }),
-  {
-    whitelist: ['theme', 'language'],
-  },
-);
+export const useAppStore = createCommonStore<IAppState>('app', (set) => ({
+  theme: 'system',
+  language: 'zh-CN',
+  setTheme: (theme) => set({ theme }),
+  setLanguage: (language) => set({ language }),
+}));
 
 export type TAppStoreState = IAppState & IHydrationState;

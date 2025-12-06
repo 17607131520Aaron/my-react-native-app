@@ -6,6 +6,7 @@
 import { create } from 'zustand';
 
 import { persist, type TPersistOptions } from './persist';
+import { getPersistConfig } from './persistConfig';
 
 import type { IHydrationState, IPersistConfig } from './types';
 import type { StateCreator, StoreApi, UseBoundStore } from 'zustand';
@@ -15,40 +16,48 @@ type TStoreReturn<T> = UseBoundStore<StoreApi<T & IHydrationState>>;
 
 /**
  * 创建业务 Store
+ * 持久化配置从 persistConfig.ts 中读取
  * @param name Store 名称
  * @param namespace 命名空间
  * @param creator Store 创建函数
- * @param persistConfig 持久化配置（可选）
+ * @param overrideConfig 覆盖持久化配置（可选）
  */
 export const createBusinessStore = <T extends Record<string, unknown>>(
   name: string,
   namespace: string,
   creator: StateCreator<T, [], []>,
-  persistConfig?: Partial<IPersistConfig>,
+  overrideConfig?: Partial<IPersistConfig>,
 ): TStoreReturn<T> => {
+  const persistSetting = getPersistConfig(name);
   const options: TPersistOptions = {
     name,
     namespace,
-    ...persistConfig,
+    enabled: persistSetting.enabled,
+    ...persistSetting.config,
+    ...overrideConfig,
   };
   return create(persist(creator, options));
 };
 
 /**
  * 创建通用 Store
+ * 持久化配置从 persistConfig.ts 中读取
  * @param name Store 名称
  * @param creator Store 创建函数
- * @param persistConfig 持久化配置（可选）
+ * @param overrideConfig 覆盖持久化配置（可选）
  */
 export const createCommonStore = <T extends Record<string, unknown>>(
   name: string,
   creator: StateCreator<T, [], []>,
-  persistConfig?: Partial<IPersistConfig>,
+  overrideConfig?: Partial<IPersistConfig>,
 ): TStoreReturn<T> => {
+  const persistSetting = getPersistConfig(name);
   const options: TPersistOptions = {
     name,
     namespace: 'common',
-    ...persistConfig,
+    enabled: persistSetting.enabled,
+    ...persistSetting.config,
+    ...overrideConfig,
   };
   return create(persist(creator, options));
 };

@@ -25,6 +25,9 @@ export {
 
 export { createBusinessStore, createCommonStore, createPlainStore } from './core/createStore';
 
+// 持久化配置
+export { PERSIST_CONFIG, getPersistConfig, type IStorePersistConfig } from './core/persistConfig';
+
 // 类型
 export type {
   IPersistConfig,

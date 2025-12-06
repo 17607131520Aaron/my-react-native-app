@@ -33,29 +33,22 @@ export interface IUserState extends Record<string, unknown> {
 }
 
 /** 用户 Store */
-export const useUserStore = createBusinessStore<IUserState>(
-  'user',
-  'user',
-  (set) => ({
-    token: null,
-    profile: null,
-    isAuthenticated: false,
-    setToken: (token) =>
-      set({
-        token,
-        isAuthenticated: token !== null,
-      }),
-    setProfile: (profile) => set({ profile }),
-    logout: () =>
-      set({
-        token: null,
-        profile: null,
-        isAuthenticated: false,
-      }),
-  }),
-  {
-    whitelist: ['token', 'profile', 'isAuthenticated'],
-  },
-);
+export const useUserStore = createBusinessStore<IUserState>('user', 'user', (set) => ({
+  token: null,
+  profile: null,
+  isAuthenticated: false,
+  setToken: (token) =>
+    set({
+      token,
+      isAuthenticated: token !== null,
+    }),
+  setProfile: (profile) => set({ profile }),
+  logout: () =>
+    set({
+      token: null,
+      profile: null,
+      isAuthenticated: false,
+    }),
+}));
 
 export type TUserStoreState = IUserState & IHydrationState;

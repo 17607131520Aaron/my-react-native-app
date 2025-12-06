@@ -48,25 +48,18 @@ const defaultSettings: IScanSettings = {
 };
 
 /** 扫描 Store */
-export const useScanStore = createBusinessStore<IScanState>(
-  'scan',
-  'scan',
-  (set, get) => ({
-    history: [],
-    settings: defaultSettings,
-    addRecord: (record) =>
-      set({
-        history: [record, ...get().history].slice(0, 100), // 最多保留100条
-      }),
-    clearHistory: () => set({ history: [] }),
-    updateSettings: (newSettings) =>
-      set({
-        settings: { ...get().settings, ...newSettings },
-      }),
-  }),
-  {
-    whitelist: ['history', 'settings'],
-  },
-);
+export const useScanStore = createBusinessStore<IScanState>('scan', 'scan', (set, get) => ({
+  history: [],
+  settings: defaultSettings,
+  addRecord: (record) =>
+    set({
+      history: [record, ...get().history].slice(0, 100), // 最多保留100条
+    }),
+  clearHistory: () => set({ history: [] }),
+  updateSettings: (newSettings) =>
+    set({
+      settings: { ...get().settings, ...newSettings },
+    }),
+}));
 
 export type TScanStoreState = IScanState & IHydrationState;
