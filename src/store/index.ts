@@ -6,7 +6,12 @@
 export { useAppStore, type IAppState, type TTheme } from './common/appStore';
 
 // 业务 Store
-export { useUserStore, type IUserState, type IUserProfile } from './business/user/userStore';
+export {
+  useUserStore,
+  type IUserState,
+  type IUserProfile,
+  type TUserRole,
+} from './business/user/userStore';
 
 export {
   useScanStore,

@@ -11,16 +11,22 @@ export interface IEngineerStackParamList {
   EngineerTaskList: { status?: 'pending' | 'completed' }; // 任务列表
   EngineerTaskDetail: { taskId: string }; // 任务详情
   EngineerProfile: undefined; // 个人资料
+  [key: string]: object | undefined;
 }
 
 // ==================== Institution 模块路由 ====================
-export interface InstitutionStackParamList {
+export interface IInstitutionStackParamList {
   InstitutionHome: undefined; // 机构首页
   InstitutionList: { filter?: string }; // 机构列表
   InstitutionDetail: { institutionId: string }; // 机构详情
   InstitutionSettings: undefined; // 机构设置
   ScanInboundPage: { scanType?: 'inbound' | 'outbound' }; // 扫码入库页面
+  [key: string]: object | undefined;
 }
+
+// 向后兼容别名
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export type InstitutionStackParamList = IInstitutionStackParamList;
 
 // ==================== Mine 模块路由 ====================
 export interface IMineStackParamList {
@@ -29,6 +35,7 @@ export interface IMineStackParamList {
   MineSettings: undefined; // 设置
   About: undefined; // 关于
   Login: undefined; // 登录（如果需要）
+  [key: string]: object | undefined;
 }
 
 // ==================== 所有路由参数（扁平化） ====================
@@ -36,18 +43,41 @@ export interface IMineStackParamList {
  * 将所有模块的路由合并为一个扁平化的路由参数列表
  * 支持直接根据路由名称跳转，无需指定模块
  */
-export interface IAllRoutesParamList
-  extends IEngineerStackParamList,
-    InstitutionStackParamList,
-    IMineStackParamList {}
+export type IAllRoutesParamList = IEngineerStackParamList &
+  IInstitutionStackParamList &
+  IMineStackParamList;
 
 // ==================== 根路由参数 ====================
 export interface IRootStackParamList {
   Engineer: NavigatorScreenParams<IEngineerStackParamList>;
-  Institution: NavigatorScreenParams<InstitutionStackParamList>;
+  Institution: NavigatorScreenParams<IInstitutionStackParamList>;
   Mine: NavigatorScreenParams<IMineStackParamList>;
   // 公共页面可以直接在根路由中定义
   Login: undefined;
+  [key: string]: object | undefined;
+}
+
+// ==================== 底部 Tab 导航参数 ====================
+/** 工程师角色的底部 Tab */
+export interface IEngineerTabParamList {
+  EngineerHomeTab: NavigatorScreenParams<IEngineerStackParamList>;
+  MineTab: NavigatorScreenParams<IMineStackParamList>;
+  [key: string]: object | undefined;
+}
+
+/** 机构角色的底部 Tab */
+export interface IInstitutionTabParamList {
+  InstitutionHomeTab: NavigatorScreenParams<IInstitutionStackParamList>;
+  MineTab: NavigatorScreenParams<IMineStackParamList>;
+  [key: string]: object | undefined;
+}
+
+/** 管理员角色的底部 Tab */
+export interface IAdminTabParamList {
+  EngineerHomeTab: NavigatorScreenParams<IEngineerStackParamList>;
+  InstitutionHomeTab: NavigatorScreenParams<IInstitutionStackParamList>;
+  MineTab: NavigatorScreenParams<IMineStackParamList>;
+  [key: string]: object | undefined;
 }
 
 // ==================== 路由名称常量 ====================
@@ -90,8 +120,6 @@ export type TRouteName = (typeof ROUTE_NAMES)[keyof typeof ROUTE_NAMES];
 export type AllRoutesParamList = IAllRoutesParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type EngineerStackParamList = IEngineerStackParamList;
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type INstitutionStackParamList = InstitutionStackParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type MineStackParamList = IMineStackParamList;
 // eslint-disable-next-line @typescript-eslint/naming-convention
