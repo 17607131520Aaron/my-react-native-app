@@ -1,0 +1,50 @@
+/**
+ * 各角色的 Tab 配置
+ */
+
+import { EngineerHomeScreen } from './EngineerHomeScreen';
+import { InstitutionHomeScreen } from './InstitutionHomeScreen';
+import { MineScreen } from './MineScreen';
+
+import type { ITabConfig } from './types';
+import type { TUserRole } from '~/store';
+
+// ==================== 单个 Tab 配置 ====================
+const ENGINEER_TAB: ITabConfig = {
+  name: 'EngineerHome',
+  label: '工作台',
+  icon: '🔧',
+  component: EngineerHomeScreen,
+};
+
+const INSTITUTION_TAB: ITabConfig = {
+  name: 'InstitutionHome',
+  label: '机构',
+  icon: '🏢',
+  component: InstitutionHomeScreen,
+};
+
+const MINE_TAB: ITabConfig = {
+  name: 'Mine',
+  label: '我的',
+  icon: '👤',
+  component: MineScreen,
+};
+
+// ==================== 各角色的 Tab 配置 ====================
+const ROLE_TABS: Record<TUserRole, ITabConfig[]> = {
+  engineer: [ENGINEER_TAB, MINE_TAB],
+  institution: [INSTITUTION_TAB, MINE_TAB],
+  admin: [ENGINEER_TAB, INSTITUTION_TAB, MINE_TAB],
+};
+
+// 默认 Tab 配置（未登录或角色未知时）
+const DEFAULT_TABS: ITabConfig[] = [INSTITUTION_TAB, MINE_TAB];
+
+/**
+ * 根据角色获取 Tab 配置
+ */
+export const getTabsByRole = (role: TUserRole | null): ITabConfig[] => {
+  if (!role) return DEFAULT_TABS;
+  return ROLE_TABS[role] ?? DEFAULT_TABS;
+};
