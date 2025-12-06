@@ -1,23 +1,17 @@
-import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { IAllRoutesParamList } from '~/routers/types';
-
-type TNavigationProp = NativeStackNavigationProp<IAllRoutesParamList>;
+import { navigateTo } from '~/routers/navigation';
 
 const AboutPage = (): React.JSX.Element => {
-  const navigation = useNavigation<TNavigationProp>();
-
-  const handleGoBack = (): void => {
-    navigation.navigate('ScanInboundPage', {});
+  const handleGoToScan = (): void => {
+    navigateTo('ScanInboundPage', {});
   };
 
   return (
     <SafeAreaView edges={['top', 'bottom']}>
       <Text>AboutPage</Text>
-      <TouchableOpacity onPress={handleGoBack}>
+      <TouchableOpacity onPress={handleGoToScan}>
         <Text>asdbahsbdh</Text>
       </TouchableOpacity>
     </SafeAreaView>

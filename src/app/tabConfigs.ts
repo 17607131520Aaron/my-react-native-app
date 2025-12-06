@@ -2,10 +2,13 @@
  * 各角色的 Tab 配置
  */
 
-import { EngineerHomeScreen, InstitutionHomeScreen, MineScreen } from '~/routers';
+import { getTabHomeRoutes } from '~/routers';
 
 import type { ITabConfig } from './types';
 import type { TUserRole } from '~/store';
+
+// 获取各模块首页组件
+const tabHomeRoutes = getTabHomeRoutes();
 
 // ==================== 单个 Tab 配置 ====================
 // Tab 名称使用 Tab 后缀，避免与 Stack Screen 名称冲突
@@ -13,21 +16,24 @@ const ENGINEER_TAB: ITabConfig = {
   name: 'EngineerTab',
   label: '工作台',
   icon: '🔧',
-  component: EngineerHomeScreen,
+  component: tabHomeRoutes.engineer?.component ?? (() => null),
+  moduleKey: 'engineer',
 };
 
 const INSTITUTION_TAB: ITabConfig = {
   name: 'InstitutionTab',
   label: '机构',
   icon: '🏢',
-  component: InstitutionHomeScreen,
+  component: tabHomeRoutes.institution?.component ?? (() => null),
+  moduleKey: 'institution',
 };
 
 const MINE_TAB: ITabConfig = {
   name: 'MineTab',
   label: '我的',
   icon: '👤',
-  component: MineScreen,
+  component: tabHomeRoutes.mine?.component ?? (() => null),
+  moduleKey: 'mine',
 };
 
 // ==================== 各角色的 Tab 配置 ====================

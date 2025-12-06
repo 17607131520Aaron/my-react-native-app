@@ -3,7 +3,33 @@
  * 统一管理所有路由的名称和参数类型
  */
 
-import type { NavigatorScreenParams } from '@react-navigation/native';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import type { ComponentType } from 'react';
+
+// ==================== 路由配置接口 ====================
+/**
+ * 统一的路由配置项接口
+ */
+export interface IRouteConfig {
+  name: keyof IAllRoutesParamList;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any>;
+  options?: NativeStackNavigationOptions;
+  /** 是否为 Tab 首页（不注册到 Root Stack） */
+  isTabHome?: boolean;
+}
+
+/**
+ * 模块路由配置接口
+ */
+export interface IModuleRoutes {
+  /** 模块名称 */
+  moduleName: string;
+  /** 该模块的所有路由 */
+  routes: IRouteConfig[];
+  /** 模块默认导航选项 */
+  defaultOptions?: NativeStackNavigationOptions;
+}
 
 // ==================== Engineer 模块路由 ====================
 export interface IEngineerStackParamList {
@@ -48,35 +74,68 @@ export type IAllRoutesParamList = IEngineerStackParamList &
   IMineStackParamList;
 
 // ==================== 根路由参数 ====================
+/**
+ * Root Stack 参数列表
+ * 包含 MainTabs 和所有页面（扁平化结构，支持跨模块导航）
+ */
 export interface IRootStackParamList {
-  Engineer: NavigatorScreenParams<IEngineerStackParamList>;
-  Institution: NavigatorScreenParams<IInstitutionStackParamList>;
-  Mine: NavigatorScreenParams<IMineStackParamList>;
-  // 公共页面可以直接在根路由中定义
+  // MainTabs 作为 Root Stack 的一个 Screen
+  MainTabs: undefined;
+
+  // Engineer 模块页面
+  EngineerHome: undefined;
+  EngineerTaskList: { status?: 'pending' | 'completed' };
+  EngineerTaskDetail: { taskId: string };
+  EngineerProfile: undefined;
+
+  // Institution 模块页面
+  InstitutionHome: undefined;
+  InstitutionList: { filter?: string };
+  InstitutionDetail: { institutionId: string };
+  InstitutionSettings: undefined;
+  ScanInboundPage: { scanType?: 'inbound' | 'outbound' };
+
+  // Mine 模块页面
+  MineHome: undefined;
+  MineProfile: undefined;
+  MineSettings: undefined;
+  About: undefined;
   Login: undefined;
+
   [key: string]: object | undefined;
 }
 
 // ==================== 底部 Tab 导航参数 ====================
-/** 工程师角色的底部 Tab */
+/**
+ * MainTab 参数列表
+ * Tab Navigator 仅用于切换首页，不包含嵌套 Stack 参数
+ */
+export interface IMainTabParamList {
+  EngineerTab: undefined;
+  InstitutionTab: undefined;
+  MineTab: undefined;
+  [key: string]: object | undefined;
+}
+
+/** 工程师角色的底部 Tab（向后兼容） */
 export interface IEngineerTabParamList {
-  EngineerHomeTab: NavigatorScreenParams<IEngineerStackParamList>;
-  MineTab: NavigatorScreenParams<IMineStackParamList>;
+  EngineerTab: undefined;
+  MineTab: undefined;
   [key: string]: object | undefined;
 }
 
-/** 机构角色的底部 Tab */
+/** 机构角色的底部 Tab（向后兼容） */
 export interface IInstitutionTabParamList {
-  InstitutionHomeTab: NavigatorScreenParams<IInstitutionStackParamList>;
-  MineTab: NavigatorScreenParams<IMineStackParamList>;
+  InstitutionTab: undefined;
+  MineTab: undefined;
   [key: string]: object | undefined;
 }
 
-/** 管理员角色的底部 Tab */
+/** 管理员角色的底部 Tab（向后兼容） */
 export interface IAdminTabParamList {
-  EngineerHomeTab: NavigatorScreenParams<IEngineerStackParamList>;
-  InstitutionHomeTab: NavigatorScreenParams<IInstitutionStackParamList>;
-  MineTab: NavigatorScreenParams<IMineStackParamList>;
+  EngineerTab: undefined;
+  InstitutionTab: undefined;
+  MineTab: undefined;
   [key: string]: object | undefined;
 }
 

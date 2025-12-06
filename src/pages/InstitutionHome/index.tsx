@@ -5,20 +5,14 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { navigateTo } from '~/routers/navigation';
 import { useTheme } from '~/theme';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { IInstitutionStackParamList } from '~/routers/types';
-
-interface IProps {
-  navigation: NativeStackNavigationProp<IInstitutionStackParamList, 'InstitutionHome'>;
-}
-
-const InstitutionHomePage: React.FC<IProps> = ({ navigation }) => {
+const InstitutionHomePage: React.FC = () => {
   const { theme } = useTheme();
 
   const handleScanInbound = () => {
-    navigation.navigate('ScanInboundPage', {});
+    navigateTo('ScanInboundPage', {});
   };
 
   return (

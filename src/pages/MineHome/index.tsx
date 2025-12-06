@@ -5,26 +5,20 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { navigateTo } from '~/routers/navigation';
 import { useUserStore } from '~/store';
 import { useTheme } from '~/theme';
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { IMineStackParamList } from '~/routers/types';
-
-interface IProps {
-  navigation: NativeStackNavigationProp<IMineStackParamList, 'MineHome'>;
-}
-
-const MineHomePage: React.FC<IProps> = ({ navigation }) => {
+const MineHomePage: React.FC = () => {
   const { theme } = useTheme();
   const { profile, isAuthenticated, logout } = useUserStore();
 
   const handleLogin = () => {
-    navigation.navigate('Login');
+    navigateTo('Login');
   };
 
   const handleAbout = () => {
-    navigation.navigate('About');
+    navigateTo('About');
   };
 
   const handleLogout = () => {

@@ -1,62 +1,54 @@
 /**
  * App 入口组件
- * 根据用户角色动态显示不同的底部导航栏
+ * 使用 Root Stack + Tab Navigator 架构支持跨模块导航
  */
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
 
-import colors from '~/common/colors';
 import { ErrorBoundary } from '~/components/shared';
-import { useUserStore } from '~/store';
+import { getAllRoutes, type IRootStackParamList } from '~/routers';
+import { navigationRef } from '~/routers/navigation';
 import { ThemeProvider } from '~/theme';
 
-import { getTabsByRole } from './tabConfigs';
+import { MainTabsScreen } from './MainTabs';
 
-import type { TMainTabParamList } from './types';
+import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 
-// ==================== 样式 ====================
-const styles = StyleSheet.create({
-  tabIcon: {
-    fontSize: 20,
-  },
-});
+// ==================== Root Stack Navigator ====================
+const RootStack = createNativeStackNavigator<IRootStackParamList>();
 
-// ==================== Tab Navigator ====================
-const Tab = createBottomTabNavigator<TMainTabParamList>();
-
-const defaultTabScreenOptions = {
+// 默认导航选项
+const defaultScreenOptions: NativeStackNavigationOptions = {
   headerShown: false,
-  tabBarActiveTintColor: colors.tabActive,
-  tabBarInactiveTintColor: colors.tabInactive,
+  animation: 'slide_from_right',
 };
 
 // ==================== 主应用内容组件 ====================
 const AppContent = (): React.JSX.Element => {
-  const { role } = useUserStore();
-
-  // 已登录根据角色显示对应的底部导航
-  const tabs = getTabsByRole(role);
+  const allRoutes = getAllRoutes();
 
   return (
-    <NavigationContainer>
-      <Tab.Navigator screenOptions={defaultTabScreenOptions}>
-        {tabs.map((tab) => (
-          <Tab.Screen
-            key={tab.name}
-            component={tab.component}
-            name={tab.name}
-            options={{
-              tabBarLabel: tab.label,
-              tabBarIcon: ({ color }) => (
-                <Text style={[styles.tabIcon, { color }]}>{tab.icon}</Text>
-              ),
-            }}
+    <NavigationContainer ref={navigationRef}>
+      <RootStack.Navigator screenOptions={defaultScreenOptions}>
+        {/* MainTabs 作为第一个 Screen */}
+        <RootStack.Screen
+          component={MainTabsScreen}
+          name='MainTabs'
+          options={{ headerShown: false }}
+        />
+
+        {/* 动态注册所有其他页面 */}
+        {allRoutes.map((route) => (
+          <RootStack.Screen
+            key={route.name}
+            component={route.component}
+            name={route.name}
+            options={route.options}
           />
         ))}
-      </Tab.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 };

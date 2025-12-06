@@ -3,24 +3,27 @@
  * 定义工程师模块的所有路由页面
  */
 
-import type { IEngineerStackParamList } from './types';
+import type { IRouteConfig } from './types';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import type { ComponentType } from 'react';
 
-/**
- * 路由配置项
- */
-export interface IEngineerRouteConfig {
-  name: keyof IEngineerStackParamList;
-  component: ComponentType<unknown>;
-  options?: NativeStackNavigationOptions;
-}
+// TODO: Import EngineerHome page when available
+// import EngineerHomePage from '~/pages/EngineerHome';
 
 /**
  * Engineer 模块路由配置列表
- * 在这里添加该模块的所有路由页面
+ * 使用统一的 IRouteConfig 接口
  */
-export const engineerRoutes: IEngineerRouteConfig[] = [
+export const engineerRoutes: IRouteConfig[] = [
+  // EngineerHome 标记为 Tab 首页，不注册到 Root Stack
+  // {
+  //   name: 'EngineerHome',
+  //   component: EngineerHomePage,
+  //   options: {
+  //     title: '工作台',
+  //     headerShown: false,
+  //   },
+  //   isTabHome: true,
+  // },
   // {
   //   name: 'EngineerProfile',
   //   component: EngineerProfilePage,

@@ -7,25 +7,14 @@ import AboutPage from '~/pages/About';
 import LoginPage from '~/pages/Login';
 import MineHomePage from '~/pages/MineHome';
 
-import type { IMineStackParamList } from './types';
+import type { IRouteConfig } from './types';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import type { ComponentType } from 'react';
-
-/**
- * 路由配置项
- */
-export interface IMineRouteConfig {
-  name: keyof IMineStackParamList;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component: ComponentType<any>;
-  options?: NativeStackNavigationOptions;
-}
 
 /**
  * Mine 模块路由配置列表
- * 在这里添加该模块的所有路由页面
+ * 使用统一的 IRouteConfig 接口
  */
-export const mineRoutes: IMineRouteConfig[] = [
+export const mineRoutes: IRouteConfig[] = [
   {
     name: 'MineHome',
     component: MineHomePage,
@@ -33,6 +22,7 @@ export const mineRoutes: IMineRouteConfig[] = [
       title: '我的',
       headerShown: false,
     },
+    isTabHome: true, // 标记为 Tab 首页
   },
   {
     name: 'About',

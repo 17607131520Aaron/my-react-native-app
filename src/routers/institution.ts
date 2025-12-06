@@ -6,25 +6,14 @@
 import InstitutionHomePage from '~/pages/InstitutionHome';
 import ScanInboundPage from '~/pages/ScanInboundPage';
 
-import type { IInstitutionStackParamList } from './types';
+import type { IRouteConfig } from './types';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import type { ComponentType } from 'react';
-
-/**
- * 路由配置项
- */
-export interface IInstitutionRouteConfig {
-  name: keyof IInstitutionStackParamList;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component: ComponentType<any>;
-  options?: NativeStackNavigationOptions;
-}
 
 /**
  * Institution 模块路由配置列表
- * 在这里添加该模块的所有路由页面
+ * 使用统一的 IRouteConfig 接口
  */
-export const institutionRoutes: IInstitutionRouteConfig[] = [
+export const institutionRoutes: IRouteConfig[] = [
   {
     name: 'InstitutionHome',
     component: InstitutionHomePage,
@@ -32,6 +21,7 @@ export const institutionRoutes: IInstitutionRouteConfig[] = [
       title: '机构',
       headerShown: false,
     },
+    isTabHome: true, // 标记为 Tab 首页
   },
   {
     name: 'ScanInboundPage',

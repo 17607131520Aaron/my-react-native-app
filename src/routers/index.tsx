@@ -2,16 +2,12 @@
  * 路由配置汇总
  * 统一管理所有模块的路由配置
  */
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
 
-import { engineerDefaultOptions, engineerRoutes } from './engineer';
-import { institutionDefaultOptions, institutionRoutes } from './institution';
-import { mineDefaultOptions, mineRoutes } from './mine';
+import { engineerRoutes } from './engineer';
+import { institutionRoutes } from './institution';
+import { mineRoutes } from './mine';
 
-import type { IAllRoutesParamList } from './types';
-import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import type { ComponentType } from 'react';
+import type { IRouteConfig } from './types';
 
 // ==================== 导出各模块路由配置 ====================
 export { engineerDefaultOptions, engineerRoutes } from './engineer';
@@ -25,8 +21,11 @@ export type {
   IAllRoutesParamList,
   IEngineerStackParamList,
   IInstitutionStackParamList,
+  IMainTabParamList,
   IMineStackParamList,
+  IModuleRoutes,
   InstitutionStackParamList,
+  IRouteConfig,
   IRootStackParamList,
   MineStackParamList,
   RootStackParamList,
@@ -35,71 +34,26 @@ export type {
 
 export { ROUTE_NAMES } from './types';
 
-// ==================== 创建各模块的 Stack Navigator ====================
-const EngineerStack = createNativeStackNavigator<IAllRoutesParamList>();
-const InstitutionStack = createNativeStackNavigator<IAllRoutesParamList>();
-const MineStack = createNativeStackNavigator<IAllRoutesParamList>();
-
-// 默认导航选项
-const defaultScreenOptions: NativeStackNavigationOptions = {
-  headerShown: false,
-  animation: 'slide_from_right',
-};
-
-// ==================== 导出统一的 Screen 组件 ====================
+// ==================== 路由聚合函数 ====================
 
 /**
- * 工程师首页 Tab Screen
+ * 聚合所有模块的路由配置
+ * 过滤掉 Tab 首页，只返回需要注册到 Root Stack 的页面
  */
-export const EngineerHomeScreen = (): React.JSX.Element => {
-  return (
-    <EngineerStack.Navigator screenOptions={{ ...defaultScreenOptions, ...engineerDefaultOptions }}>
-      {engineerRoutes.map((route) => (
-        <EngineerStack.Screen
-          key={route.name}
-          component={route.component}
-          name={route.name}
-          options={route.options}
-        />
-      ))}
-    </EngineerStack.Navigator>
-  );
-};
+export function getAllRoutes(): IRouteConfig[] {
+  const allModuleRoutes: IRouteConfig[] = [...engineerRoutes, ...institutionRoutes, ...mineRoutes];
+
+  // 过滤掉 Tab 首页
+  return allModuleRoutes.filter((route) => !route.isTabHome);
+}
 
 /**
- * 机构首页 Tab Screen
+ * 获取各模块的首页配置（用于 Tab Navigator）
  */
-export const InstitutionHomeScreen = (): React.JSX.Element => {
-  return (
-    <InstitutionStack.Navigator
-      screenOptions={{ ...defaultScreenOptions, ...institutionDefaultOptions }}
-    >
-      {institutionRoutes.map((route) => (
-        <InstitutionStack.Screen
-          key={route.name}
-          component={route.component}
-          name={route.name}
-          options={route.options}
-        />
-      ))}
-    </InstitutionStack.Navigator>
-  );
-};
-
-/**
- * 我的 Tab Screen
- */
-export const MineScreen = (): React.JSX.Element => {
-  return (
-    <MineStack.Navigator screenOptions={{ ...defaultScreenOptions, ...mineDefaultOptions }}>
-      {mineRoutes.map((route) => (
-        <MineStack.Screen
-          key={route.name}
-          component={route.component}
-          name={route.name}
-          options={route.options}
-        />
-      ))}
-    </MineStack.Navigator>
-  );
-};
+export function getTabHomeRoutes(): Record<string, IRouteConfig | undefined> {
+  return {
+    engineer: engineerRoutes.find((r) => r.isTabHome),
+    institution: institutionRoutes.find((r) => r.isTabHome),
+    mine: mineRoutes.find((r) => r.isTabHome),
+  };
+}
