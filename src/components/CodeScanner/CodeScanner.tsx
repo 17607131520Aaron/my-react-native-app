@@ -150,9 +150,13 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
     [shouldPause, isDuplicate, handleScan, onDuplicateScan, allowDuplicateScan, onScan],
   );
 
-  // 处理权限被拒绝
+  // 权限检查中，显示空容器
+  if (hasPermission === null) {
+    return <View style={[styles.container, style]} />;
+  }
+
+  // 权限被拒绝
   if (hasPermission === false) {
-    onPermissionDenied?.();
     return null;
   }
 
