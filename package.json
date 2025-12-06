@@ -45,6 +45,7 @@
     "react-native-screens": "^4.18.0",
     "react-native-signature-canvas": "^5.0.1",
     "react-native-stickyheader": "^1.1.3",
+    "react-native-svg": "^15.15.1",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^4.2.0",
     "react-native-table-component": "^1.2.2",

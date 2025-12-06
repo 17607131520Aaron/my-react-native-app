@@ -9,3 +9,10 @@ export {
   type IErrorBoundaryState,
   type IErrorFallbackProps,
 } from './ErrorBoundary';
+
+export {
+  NavigationBar,
+  type INavigationBarProps,
+  type INavBarButton,
+  type INavBarSearchConfig,
+} from './NavigationBar';

@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import { ErrorBoundary } from '~/components/shared';
+import { ErrorBoundary, NavigationBar } from '~/components/shared';
 import { getAllRoutes, type IRootStackParamList } from '~/routers';
 import { navigationRef } from '~/routers/navigation';
 import { ThemeProvider } from '~/theme';
@@ -20,9 +20,17 @@ import type { NativeStackNavigationOptions } from '@react-navigation/native-stac
 const RootStack = createNativeStackNavigator<IRootStackParamList>();
 
 // 默认导航选项
+// 使用自定义 NavigationBar 组件替代原生 header
 const defaultScreenOptions: NativeStackNavigationOptions = {
-  headerShown: false,
+  headerShown: true,
   animation: 'slide_from_right',
+  header: ({ options }) => (
+    <NavigationBar
+      showBack
+      showBorder={false}
+      title={typeof options.title === 'string' ? options.title : undefined}
+    />
+  ),
 };
 
 // ==================== 主应用内容组件 ====================
