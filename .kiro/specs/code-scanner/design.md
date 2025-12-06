@@ -4,6 +4,8 @@
 
 CodeScanner 是一个基于 `react-native-camera-kit` 的 React Native 扫码组件，提供二维码和条形码扫描功能。组件采用模块化设计，将核心扫码逻辑、缓存管理、时间间隔控制分离为独立模块，便于测试和维护。
 
+组件支持完整的生命周期管理，能够在页面切换、App 进入后台等场景下自动暂停扫码，避免资源浪费和意外扫码。
+
 ## 架构
 
 ```mermaid
@@ -24,20 +26,26 @@ graph TB
         USC[useScanCache]
         UST[useScanThrottle]
         UCS[useCodeScanner]
+        USLC[useScannerLifecycle]
     end
 
     subgraph "外部依赖"
         CK[react-native-camera-kit]
+        AS[AppState]
+        RN[React Navigation]
     end
 
     CS --> CP
     CS --> SF
     CS --> UCS
+    CS --> USLC
     UCS --> USC
     UCS --> UST
     USC --> SC
     UST --> TH
     CP --> CK
+    USLC --> AS
+    USLC --> RN
 ```
 
 ## 组件和接口
@@ -208,6 +216,40 @@ interface UseCodeScannerReturn {
 function useCodeScanner(options?: UseCodeScannerOptions): UseCodeScannerReturn;
 ```
 
+### 7. useScannerLifecycle Hook
+
+```typescript
+interface UseScannerLifecycleOptions {
+  /** 是否启用 App 状态监听，默认 true */
+  enableAppStateListener?: boolean;
+  /** 是否启用导航焦点监听，默认 true */
+  enableFocusListener?: boolean;
+  /** 外部暂停状态（用户手动控制） */
+  externalPaused?: boolean;
+}
+
+interface UseScannerLifecycleReturn {
+  /** 是否应该暂停扫码（综合 App 状态、导航焦点、外部暂停） */
+  shouldPause: boolean;
+  /** 当前 App 是否在前台 */
+  isAppActive: boolean;
+  /** 当前页面是否有焦点 */
+  isFocused: boolean;
+}
+
+function useScannerLifecycle(options?: UseScannerLifecycleOptions): UseScannerLifecycleReturn;
+```
+
+**生命周期状态计算逻辑：**
+
+```typescript
+shouldPause = externalPaused || !isAppActive || !isFocused;
+```
+
+- `externalPaused`: 用户通过 `paused` prop 手动控制
+- `isAppActive`: App 是否在前台（通过 AppState 监听）
+- `isFocused`: 页面是否有焦点（通过 React Navigation 的 useFocusEffect 监听）
+
 ## 数据模型
 
 ### CacheEntry
@@ -277,6 +319,24 @@ _对于任意_ ScanCache 和任意码值，在将该值添加到缓存后，has(
 
 **验证: 需求 6.3**
 
+### 属性 9: App 状态转换往返
+
+*对于任意*未手动暂停的 CodeScanner，当 App 从前台进入后台再回到前台时，扫码功能必须恢复为活跃状态。
+
+**验证: 需求 7.2, 7.3**
+
+### 属性 10: 导航焦点转换往返
+
+*对于任意*未手动暂停的 CodeScanner，当页面失去焦点再重新获得焦点时，扫码功能必须恢复为活跃状态。
+
+**验证: 需求 7.4, 7.5**
+
+### 属性 11: 暂停状态一致性
+
+*对于任意*因 App 状态或导航焦点而暂停的 CodeScanner，相机预览必须保持可见，但 scanBarcode 属性必须为 false。
+
+**验证: 需求 7.6**
+
 ## 错误处理
 
 ### 相机权限错误
@@ -293,6 +353,12 @@ _对于任意_ ScanCache 和任意码值，在将该值添加到缓存后，has(
 
 - 缓存操作不抛出异常
 - 无效的 JSON 恢复缓存时返回空缓存
+
+### 生命周期错误
+
+- AppState 监听器在组件卸载时自动移除，防止内存泄漏
+- 导航焦点监听器通过 useFocusEffect 自动管理，无需手动清理
+- 组件卸载时确保所有异步操作被取消
 
 ## 测试策略
 
@@ -315,6 +381,9 @@ _对于任意_ ScanCache 和任意码值，在将该值添加到缓存后，has(
 6. **缓存清除测试** - 验证属性 6
 7. **序列化往返测试** - 验证属性 7
 8. **无效 JSON 测试** - 验证属性 8
+9. **App 状态转换测试** - 验证属性 9
+10. **导航焦点转换测试** - 验证属性 10
+11. **暂停状态一致性测试** - 验证属性 11
 
 ### 单元测试
 
@@ -325,6 +394,8 @@ _对于任意_ ScanCache 和任意码值，在将该值添加到缓存后，has(
 1. **ScanCache 默认配置** - 验证默认 maxSize 和 expirationMs
 2. **ScanThrottle 零间隔** - 验证 interval=0 时始终允许扫码
 3. **组件 Props 默认值** - 验证组件默认配置
+4. **useScannerLifecycle Hook** - 验证生命周期状态计算逻辑
+5. **组件卸载清理** - 验证资源释放
 
 ### 测试文件结构
 
@@ -336,11 +407,15 @@ src/components/CodeScanner/
 │   ├── ScanThrottle.test.ts
 │   ├── ScanThrottle.property.test.ts
 │   ├── ScanResultSerializer.test.ts
-│   └── ScanResultSerializer.property.test.ts
+│   ├── ScanResultSerializer.property.test.ts
+│   ├── useScannerLifecycle.test.ts
+│   └── useScannerLifecycle.property.test.ts
 ├── index.tsx
+├── CodeScanner.tsx
 ├── ScanCache.ts
 ├── ScanThrottle.ts
 ├── ScanResultSerializer.ts
 ├── types.ts
-└── useCodeScanner.ts
+├── useCodeScanner.ts
+└── useScannerLifecycle.ts
 ```

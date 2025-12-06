@@ -9,6 +9,7 @@ import { Camera, CameraType } from 'react-native-camera-kit';
 
 import ScanFrame from './ScanFrame';
 import { useCodeScanner } from './useCodeScanner';
+import { useScannerLifecycle } from './useScannerLifecycle';
 
 import type { ICodeScannerProps } from './types';
 
@@ -37,6 +38,11 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
     enableDuplicateDetection,
   });
 
+  // Manage lifecycle based on app state and navigation focus
+  const { shouldPause } = useScannerLifecycle({
+    externalPaused: paused,
+  });
+
   // Request camera permission on mount
   useEffect(() => {
     const requestPermission = async (): Promise<void> => {
@@ -58,7 +64,8 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
    */
   const handleReadCode = useCallback(
     (event: { nativeEvent: { codeStringValue: string; codeFormat?: string } }) => {
-      if (paused) {
+      // Use shouldPause which considers app state, navigation focus, and external paused prop
+      if (shouldPause) {
         return;
       }
 
@@ -89,7 +96,7 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
         onScan(result);
       }
     },
-    [paused, isDuplicate, handleScan, onDuplicateScan, allowDuplicateScan, onScan],
+    [shouldPause, isDuplicate, handleScan, onDuplicateScan, allowDuplicateScan, onScan],
   );
 
   // Handle permission denied
@@ -102,7 +109,7 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
     <View style={[styles.container, style]}>
       <Camera
         cameraType={CameraType.Back}
-        scanBarcode={!paused}
+        scanBarcode={!shouldPause}
         showFrame={false}
         style={styles.camera}
         torchMode={torchMode}

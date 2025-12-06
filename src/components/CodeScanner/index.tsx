@@ -19,6 +19,11 @@ export { ScanResultSerializer } from './ScanResultSerializer';
 // Hooks
 export { useCodeScanner } from './useCodeScanner';
 export type { IUseCodeScannerOptions, IUseCodeScannerReturn } from './useCodeScanner';
+export { useScannerLifecycle } from './useScannerLifecycle';
+export type {
+  IUseScannerLifecycleOptions,
+  IUseScannerLifecycleReturn,
+} from './useScannerLifecycle';
 
 // Types
 export type {

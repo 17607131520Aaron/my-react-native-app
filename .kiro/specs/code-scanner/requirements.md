@@ -77,3 +77,16 @@
 1. WHEN a ScanResult is serialized to JSON THEN the CodeScanner SHALL produce a valid JSON string containing all ScanResult properties
 2. WHEN a valid JSON string is deserialized THEN the CodeScanner SHALL produce an equivalent ScanResult object
 3. WHEN an invalid JSON string is deserialized THEN the CodeScanner SHALL return an error result indicating the parsing failure
+
+### Requirement 7
+
+**User Story:** As a developer, I want the scanner to automatically stop when the component is not visible or the app is in background, so that I can save device resources and prevent unintended scans.
+
+#### Acceptance Criteria
+
+1. WHEN the CodeScanner component unmounts THEN the CodeScanner SHALL stop all scanning operations and release camera resources immediately
+2. WHEN the app transitions to background state THEN the CodeScanner SHALL pause scanning operations automatically
+3. WHEN the app transitions back to foreground state THEN the CodeScanner SHALL resume scanning operations if the component is still mounted and not paused
+4. WHEN the screen containing CodeScanner loses focus (navigation away) THEN the CodeScanner SHALL pause scanning operations
+5. WHEN the screen containing CodeScanner regains focus (navigation back) THEN the CodeScanner SHALL resume scanning operations if not manually paused
+6. WHEN the CodeScanner is paused due to app state or navigation THEN the CodeScanner SHALL maintain the camera preview without processing scan events

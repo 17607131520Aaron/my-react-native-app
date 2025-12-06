@@ -99,4 +99,45 @@
     - _Requirements: All_
 
 - [x] 9. Final Checkpoint - Ensure all tests pass
+
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [x] 10. Implement lifecycle management
+
+  - [x] 10.1 Create useScannerLifecycle hook
+
+    - Implement AppState listener for background/foreground detection
+    - Implement navigation focus detection using useFocusEffect from @react-navigation/native
+    - Compute shouldPause based on externalPaused, isAppActive, and isFocused
+    - Ensure proper cleanup of listeners on unmount
+    - _Requirements: 7.1, 7.2, 7.3, 7.4, 7.5, 7.6_
+
+  - [ ]\* 10.2 Write property test for App state transition round-trip
+
+    - **Property 9: App State Transition Round-Trip**
+    - **Validates: Requirements 7.2, 7.3**
+
+  - [ ]\* 10.3 Write property test for navigation focus transition round-trip
+
+    - **Property 10: Navigation Focus Transition Round-Trip**
+    - **Validates: Requirements 7.4, 7.5**
+
+  - [ ]\* 10.4 Write property test for pause state consistency
+
+    - **Property 11: Pause State Consistency**
+    - **Validates: Requirements 7.6**
+
+  - [x] 10.5 Integrate useScannerLifecycle into CodeScanner component
+
+    - Replace simple paused prop logic with useScannerLifecycle hook
+    - Pass shouldPause to Camera's scanBarcode prop
+    - Maintain camera preview visibility when paused
+    - _Requirements: 7.1, 7.6_
+
+  - [x] 10.6 Update component exports
+    - Export useScannerLifecycle hook from index.tsx
+    - Export UseScannerLifecycleOptions and UseScannerLifecycleReturn types
+    - _Requirements: 7.1_
+
+- [ ] 11. Checkpoint - Ensure lifecycle management tests pass
   - Ensure all tests pass, ask the user if questions arise.
