@@ -2,9 +2,7 @@
  * 各角色的 Tab 配置
  */
 
-import { EngineerHomeScreen } from './EngineerHomeScreen';
-import { InstitutionHomeScreen } from './InstitutionHomeScreen';
-import { MineScreen } from './MineScreen';
+import { EngineerHomeScreen, InstitutionHomeScreen, MineScreen } from '~/routers';
 
 import type { ITabConfig } from './types';
 import type { TUserRole } from '~/store';
