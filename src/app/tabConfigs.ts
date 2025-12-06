@@ -8,22 +8,23 @@ import type { ITabConfig } from './types';
 import type { TUserRole } from '~/store';
 
 // ==================== 单个 Tab 配置 ====================
+// Tab 名称使用 Tab 后缀，避免与 Stack Screen 名称冲突
 const ENGINEER_TAB: ITabConfig = {
-  name: 'EngineerHome',
+  name: 'EngineerTab',
   label: '工作台',
   icon: '🔧',
   component: EngineerHomeScreen,
 };
 
 const INSTITUTION_TAB: ITabConfig = {
-  name: 'InstitutionHome',
+  name: 'InstitutionTab',
   label: '机构',
   icon: '🏢',
   component: InstitutionHomeScreen,
 };
 
 const MINE_TAB: ITabConfig = {
-  name: 'Mine',
+  name: 'MineTab',
   label: '我的',
   icon: '👤',
   component: MineScreen,

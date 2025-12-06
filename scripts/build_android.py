@@ -188,25 +188,49 @@ def get_apk_path(release: bool = False) -> Path:
     return None
 
 
-def copy_apk_to_output(release: bool = False) -> Path:
-    """复制 APK 到输出目录"""
+def clean_output_dir():
+    """清空输出目录"""
+    print('🗑️ 清空输出目录...')
+    project_root = get_project_root()
+    output_dir = project_root / 'output'
+
+    if output_dir.exists():
+        # 删除目录中的所有文件
+        for file in output_dir.iterdir():
+            if file.is_file():
+                file.unlink()
+                print(f'  已删除: {file.name}')
+        print('  ✅ 输出目录已清空\n')
+    else:
+        print('  输出目录不存在，跳过清理\n')
+
+
+def copy_apk_to_output(release: bool = False) -> list:
+    """复制所有 APK 到输出目录"""
     project_root = get_project_root()
     output_dir = project_root / 'output'
     output_dir.mkdir(exist_ok=True)
 
-    apk_path = get_apk_path(release)
-    if not apk_path:
-        print('❌ 未找到生成的 APK 文件')
-        return None
-
-    # 生成带时间戳的文件名
     build_type = 'release' if release else 'debug'
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    new_name = f'app-{build_type}-{timestamp}.apk'
-    output_path = output_dir / new_name
+    apk_dir = project_root / 'android' / 'app' / 'build' / 'outputs' / 'apk' / build_type
 
-    shutil.copy2(apk_path, output_path)
-    return output_path
+    if not apk_dir.exists():
+        print('❌ 未找到 APK 输出目录')
+        return []
+
+    # 复制所有 APK 文件
+    copied_files = []
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+    for apk_file in apk_dir.glob('*.apk'):
+        # 保留原文件名，添加时间戳
+        base_name = apk_file.stem  # 如 app-arm64-v8a-release
+        new_name = f'{base_name}-{timestamp}.apk'
+        output_path = output_dir / new_name
+        shutil.copy2(apk_file, output_path)
+        copied_files.append(output_path)
+
+    return copied_files
 
 
 def install_apk(release: bool = False):
@@ -266,21 +290,24 @@ def main():
     if not args.skip_deps:
         install_dependencies()
 
-    # 3. 清理缓存（可选）
+    # 3. 清空输出目录
+    clean_output_dir()
+
+    # 4. 清理缓存（可选）
     if args.clean:
         clean_build()
 
-    # 4. 构建 JS Bundle（Release 模式需要）
+    # 5. 构建 JS Bundle（Release 模式需要）
     if args.release:
         build_bundle()
 
-    # 5. 构建 APK
+    # 6. 构建 APK
     build_apk(args.release)
 
-    # 6. 复制到输出目录
-    output_path = copy_apk_to_output(args.release)
+    # 7. 复制到输出目录
+    output_files = copy_apk_to_output(args.release)
 
-    # 7. 安装到设备（可选）
+    # 8. 安装到设备（可选）
     if args.install:
         install_apk(args.release)
 
@@ -289,18 +316,12 @@ def main():
     print('✅ 构建完成!')
     print('=' * 50)
 
-    if output_path:
-        print(f'\n📦 APK 文件位置:')
-        print(f'   {output_path}')
-
-        # 获取文件大小
-        size_mb = output_path.stat().st_size / (1024 * 1024)
-        print(f'   大小: {size_mb:.2f} MB')
-
-    apk_path = get_apk_path(args.release)
-    if apk_path:
-        print(f'\n📁 原始 APK 位置:')
-        print(f'   {apk_path}')
+    if output_files:
+        print(f'\n📦 APK 文件位置 ({len(output_files)} 个):')
+        for apk_path in output_files:
+            size_mb = apk_path.stat().st_size / (1024 * 1024)
+            print(f'   {apk_path.name} ({size_mb:.2f} MB)')
+        print(f'\n📁 输出目录: {get_project_root() / "output"}')
 
     if not args.install:
         print('\n💡 提示: 使用 --install 参数可自动安装到连接的设备')

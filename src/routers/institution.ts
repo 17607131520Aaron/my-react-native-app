@@ -3,6 +3,7 @@
  * 定义机构模块的所有路由页面
  */
 
+import InstitutionHomePage from '~/pages/InstitutionHome';
 import ScanInboundPage from '~/pages/ScanInboundPage';
 
 import type { IInstitutionStackParamList } from './types';
@@ -24,6 +25,14 @@ export interface IInstitutionRouteConfig {
  * 在这里添加该模块的所有路由页面
  */
 export const institutionRoutes: IInstitutionRouteConfig[] = [
+  {
+    name: 'InstitutionHome',
+    component: InstitutionHomePage,
+    options: {
+      title: '机构',
+      headerShown: false,
+    },
+  },
   {
     name: 'ScanInboundPage',
     component: ScanInboundPage,

@@ -35,23 +35,10 @@ export type {
 
 export { ROUTE_NAMES } from './types';
 
-// ==================== 创建统一的 Stack Navigator ====================
-const AppStack = createNativeStackNavigator<IAllRoutesParamList>();
-
-// ==================== 合并所有路由配置 ====================
-interface IRouteConfig {
-  name: keyof IAllRoutesParamList;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  component: ComponentType<any>;
-  options?: NativeStackNavigationOptions;
-}
-
-// 合并所有模块的路由
-const allRoutes: IRouteConfig[] = [
-  ...engineerRoutes,
-  ...institutionRoutes,
-  ...mineRoutes,
-] as IRouteConfig[];
+// ==================== 创建各模块的 Stack Navigator ====================
+const EngineerStack = createNativeStackNavigator<IAllRoutesParamList>();
+const InstitutionStack = createNativeStackNavigator<IAllRoutesParamList>();
+const MineStack = createNativeStackNavigator<IAllRoutesParamList>();
 
 // 默认导航选项
 const defaultScreenOptions: NativeStackNavigationOptions = {
@@ -62,55 +49,57 @@ const defaultScreenOptions: NativeStackNavigationOptions = {
 // ==================== 导出统一的 Screen 组件 ====================
 
 /**
- * 工程师首页 Tab Screen（包含所有路由）
+ * 工程师首页 Tab Screen
  */
 export const EngineerHomeScreen = (): React.JSX.Element => {
   return (
-    <AppStack.Navigator screenOptions={{ ...defaultScreenOptions, ...engineerDefaultOptions }}>
-      {allRoutes.map((route) => (
-        <AppStack.Screen
+    <EngineerStack.Navigator screenOptions={{ ...defaultScreenOptions, ...engineerDefaultOptions }}>
+      {engineerRoutes.map((route) => (
+        <EngineerStack.Screen
           key={route.name}
           component={route.component}
           name={route.name}
           options={route.options}
         />
       ))}
-    </AppStack.Navigator>
+    </EngineerStack.Navigator>
   );
 };
 
 /**
- * 机构首页 Tab Screen（包含所有路由）
+ * 机构首页 Tab Screen
  */
 export const InstitutionHomeScreen = (): React.JSX.Element => {
   return (
-    <AppStack.Navigator screenOptions={{ ...defaultScreenOptions, ...institutionDefaultOptions }}>
-      {allRoutes.map((route) => (
-        <AppStack.Screen
+    <InstitutionStack.Navigator
+      screenOptions={{ ...defaultScreenOptions, ...institutionDefaultOptions }}
+    >
+      {institutionRoutes.map((route) => (
+        <InstitutionStack.Screen
           key={route.name}
           component={route.component}
           name={route.name}
           options={route.options}
         />
       ))}
-    </AppStack.Navigator>
+    </InstitutionStack.Navigator>
   );
 };
 
 /**
- * 我的 Tab Screen（包含所有路由）
+ * 我的 Tab Screen
  */
 export const MineScreen = (): React.JSX.Element => {
   return (
-    <AppStack.Navigator screenOptions={{ ...defaultScreenOptions, ...mineDefaultOptions }}>
-      {allRoutes.map((route) => (
-        <AppStack.Screen
+    <MineStack.Navigator screenOptions={{ ...defaultScreenOptions, ...mineDefaultOptions }}>
+      {mineRoutes.map((route) => (
+        <MineStack.Screen
           key={route.name}
           component={route.component}
           name={route.name}
           options={route.options}
         />
       ))}
-    </AppStack.Navigator>
+    </MineStack.Navigator>
   );
 };

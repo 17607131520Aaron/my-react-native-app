@@ -5,6 +5,7 @@
 
 import AboutPage from '~/pages/About';
 import LoginPage from '~/pages/Login';
+import MineHomePage from '~/pages/MineHome';
 
 import type { IMineStackParamList } from './types';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -15,7 +16,8 @@ import type { ComponentType } from 'react';
  */
 export interface IMineRouteConfig {
   name: keyof IMineStackParamList;
-  component: ComponentType<unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any>;
   options?: NativeStackNavigationOptions;
 }
 
@@ -24,6 +26,14 @@ export interface IMineRouteConfig {
  * 在这里添加该模块的所有路由页面
  */
 export const mineRoutes: IMineRouteConfig[] = [
+  {
+    name: 'MineHome',
+    component: MineHomePage,
+    options: {
+      title: '我的',
+      headerShown: false,
+    },
+  },
   {
     name: 'About',
     component: AboutPage,
