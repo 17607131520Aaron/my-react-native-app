@@ -1,6 +1,6 @@
 /**
- * CodeScanner Component
- * A barcode/QR code scanner component based on react-native-camera-kit
+ * CodeScanner 组件
+ * 基于 react-native-camera-kit 的条形码/二维码扫描组件
  */
 
 import React, { useCallback, useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { useScannerLifecycle } from './useScannerLifecycle';
 import type { ICodeScannerProps } from './types';
 
 /**
- * CodeScanner component for scanning QR codes and barcodes
+ * 用于扫描二维码和条形码的 CodeScanner 组件
  */
 export const CodeScanner: React.FC<ICodeScannerProps> = ({
   onScan,
@@ -38,17 +38,17 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
     enableDuplicateDetection,
   });
 
-  // Manage lifecycle based on app state and navigation focus
+  // 基于 App 状态和导航焦点管理生命周期
   const { shouldPause } = useScannerLifecycle({
-    externalPaused: paused,
+    isExternalPaused: paused,
   });
 
-  // Request camera permission on mount
+  // 组件挂载时请求相机权限
   useEffect(() => {
     const requestPermission = async (): Promise<void> => {
       try {
-        // react-native-camera-kit handles permission internally
-        // We just need to check if it's available
+        // react-native-camera-kit 内部处理权限
+        // 我们只需要检查是否可用
         setHasPermission(true);
       } catch {
         setHasPermission(false);
@@ -60,11 +60,11 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
   }, [onPermissionDenied]);
 
   /**
-   * Handle barcode read event from camera
+   * 处理相机读取条码事件
    */
   const handleReadCode = useCallback(
     (event: { nativeEvent: { codeStringValue: string; codeFormat?: string } }) => {
-      // Use shouldPause which considers app state, navigation focus, and external paused prop
+      // 使用 shouldPause，它综合考虑了 App 状态、导航焦点和外部暂停属性
       if (shouldPause) {
         return;
       }
@@ -72,34 +72,34 @@ export const CodeScanner: React.FC<ICodeScannerProps> = ({
       const { codeStringValue, codeFormat } = event.nativeEvent;
       const codeType = codeFormat ?? 'unknown';
 
-      // Check for duplicate
+      // 检查是否重复扫码
       const isDuplicateScan = isDuplicate(codeStringValue);
 
-      // Process scan through hook
+      // 通过 hook 处理扫码
       const result = handleScan(codeStringValue, codeType);
 
       if (!result) {
-        // Throttled, ignore
+        // 被节流，忽略
         return;
       }
 
       if (isDuplicateScan) {
-        // Notify duplicate
+        // 通知重复扫码
         onDuplicateScan?.(result);
 
-        // Only call onScan if allowDuplicateScan is true
+        // 只有当 allowDuplicateScan 为 true 时才调用 onScan
         if (allowDuplicateScan) {
           onScan(result);
         }
       } else {
-        // New scan
+        // 新扫码
         onScan(result);
       }
     },
     [shouldPause, isDuplicate, handleScan, onDuplicateScan, allowDuplicateScan, onScan],
   );
 
-  // Handle permission denied
+  // 处理权限被拒绝
   if (hasPermission === false) {
     onPermissionDenied?.();
     return null;

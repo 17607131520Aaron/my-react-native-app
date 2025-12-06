@@ -1,19 +1,19 @@
 /**
- * ScanThrottle - Controls the minimum time interval between scans
- * Prevents rapid repeated scans by enforcing a configurable delay
+ * ScanThrottle - 控制扫码之间的最小时间间隔
+ * 通过强制可配置的延迟来防止快速重复扫码
  */
 
 /**
- * ScanThrottle class for managing scan rate limiting
- * Enforces a minimum time interval between successful scans
+ * ScanThrottle 类用于管理扫码速率限制
+ * 强制成功扫码之间的最小时间间隔
  */
 export class ScanThrottle {
   private intervalMs: number;
   private lastScanTimestamp: number | null;
 
   /**
-   * Creates a new ScanThrottle instance
-   * @param intervalMs - Minimum time interval between scans in milliseconds
+   * 创建一个新的 ScanThrottle 实例
+   * @param intervalMs - 扫码之间的最小时间间隔（毫秒）
    */
   constructor(intervalMs: number) {
     this.intervalMs = intervalMs;
@@ -21,50 +21,50 @@ export class ScanThrottle {
   }
 
   /**
-   * Checks if a scan can be performed based on the throttle interval
-   * @returns true if enough time has passed since the last scan, false otherwise
+   * 根据节流间隔检查是否可以执行扫码
+   * @returns 如果距离上次扫码已过足够时间返回 true，否则返回 false
    */
   canScan(): boolean {
-    // If interval is 0 or negative, always allow scanning
+    // 如果间隔为 0 或负数，始终允许扫码
     if (this.intervalMs <= 0) {
       return true;
     }
 
-    // If no scan has been recorded yet, allow scanning
+    // 如果还没有记录扫码，允许扫码
     if (this.lastScanTimestamp === null) {
       return true;
     }
 
-    // Check if enough time has passed since the last scan
+    // 检查距离上次扫码是否已过足够时间
     const now = Date.now();
     return now - this.lastScanTimestamp >= this.intervalMs;
   }
 
   /**
-   * Records a scan, updating the last scan timestamp
+   * 记录一次扫码，更新上次扫码时间戳
    */
   recordScan(): void {
     this.lastScanTimestamp = Date.now();
   }
 
   /**
-   * Resets the throttle state, allowing immediate scanning
+   * 重置节流状态，允许立即扫码
    */
   reset(): void {
     this.lastScanTimestamp = null;
   }
 
   /**
-   * Gets the remaining time until the next scan is allowed
-   * @returns Time in milliseconds until next scan is allowed, or 0 if scanning is allowed now
+   * 获取距离下次允许扫码的剩余时间
+   * @returns 距离下次允许扫码的时间（毫秒），如果现在就可以扫码则返回 0
    */
   getRemainingTime(): number {
-    // If interval is 0 or negative, no waiting required
+    // 如果间隔为 0 或负数，无需等待
     if (this.intervalMs <= 0) {
       return 0;
     }
 
-    // If no scan has been recorded yet, no waiting required
+    // 如果还没有记录扫码，无需等待
     if (this.lastScanTimestamp === null) {
       return 0;
     }

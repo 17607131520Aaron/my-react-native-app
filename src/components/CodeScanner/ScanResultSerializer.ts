@@ -1,14 +1,14 @@
 /**
  * ScanResultSerializer
- * Handles serialization and deserialization of ScanResult objects
+ * 处理 ScanResult 对象的序列化和反序列化
  */
 
 import type { IScanResult, ISerializationResult } from './types';
 
 /**
- * Validates that an object has the required ScanResult properties
- * @param obj - The object to validate
- * @returns true if the object is a valid ScanResult
+ * 验证一个对象是否具有必需的 ScanResult 属性
+ * @param obj - 要验证的对象
+ * @returns 如果对象是有效的 ScanResult 返回 true
  */
 function isValidScanResult(obj: unknown): obj is IScanResult {
   if (typeof obj !== 'object' || obj === null) {
@@ -25,14 +25,14 @@ function isValidScanResult(obj: unknown): obj is IScanResult {
 }
 
 /**
- * ScanResultSerializer class
- * Provides static methods for serializing and deserializing ScanResult objects
+ * ScanResultSerializer 类
+ * 提供序列化和反序列化 ScanResult 对象的静态方法
  */
 export class ScanResultSerializer {
   /**
-   * Serialize a ScanResult to a JSON string
-   * @param result - The ScanResult to serialize
-   * @returns A JSON string representation of the ScanResult
+   * 将 ScanResult 序列化为 JSON 字符串
+   * @param result - 要序列化的 ScanResult
+   * @returns ScanResult 的 JSON 字符串表示
    */
   static serialize(result: IScanResult): string {
     return JSON.stringify({
@@ -43,9 +43,9 @@ export class ScanResultSerializer {
   }
 
   /**
-   * Deserialize a JSON string to a ScanResult
-   * @param json - The JSON string to deserialize
-   * @returns A SerializationResult containing the ScanResult or an error
+   * 将 JSON 字符串反序列化为 ScanResult
+   * @param json - 要反序列化的 JSON 字符串
+   * @returns 包含 ScanResult 或错误的 SerializationResult
    */
   static deserialize(json: string): ISerializationResult<IScanResult> {
     try {
@@ -54,8 +54,7 @@ export class ScanResultSerializer {
       if (!isValidScanResult(parsed)) {
         return {
           success: false,
-          error:
-            'Invalid ScanResult structure: missing or invalid required fields (value, codeType, timestamp)',
+          error: '无效的 ScanResult 结构：缺少或无效的必需字段（value、codeType、timestamp）',
         };
       }
 
@@ -68,18 +67,18 @@ export class ScanResultSerializer {
         },
       };
     } catch (e) {
-      const errorMessage = e instanceof Error ? e.message : 'Unknown parsing error';
+      const errorMessage = e instanceof Error ? e.message : '未知解析错误';
       return {
         success: false,
-        error: `JSON parsing failed: ${errorMessage}`,
+        error: `JSON 解析失败：${errorMessage}`,
       };
     }
   }
 
   /**
-   * Serialize an array of ScanResults to a JSON string
-   * @param results - The array of ScanResults to serialize
-   * @returns A JSON string representation of the ScanResult array
+   * 将 ScanResult 数组序列化为 JSON 字符串
+   * @param results - 要序列化的 ScanResult 数组
+   * @returns ScanResult 数组的 JSON 字符串表示
    */
   static serializeArray(results: IScanResult[]): string {
     return JSON.stringify(
@@ -92,9 +91,9 @@ export class ScanResultSerializer {
   }
 
   /**
-   * Deserialize a JSON string to an array of ScanResults
-   * @param json - The JSON string to deserialize
-   * @returns A SerializationResult containing the ScanResult array or an error
+   * 将 JSON 字符串反序列化为 ScanResult 数组
+   * @param json - 要反序列化的 JSON 字符串
+   * @returns 包含 ScanResult 数组或错误的 SerializationResult
    */
   static deserializeArray(json: string): ISerializationResult<IScanResult[]> {
     try {
@@ -103,7 +102,7 @@ export class ScanResultSerializer {
       if (!Array.isArray(parsed)) {
         return {
           success: false,
-          error: 'Invalid ScanResult array: expected an array',
+          error: '无效的 ScanResult 数组：期望是一个数组',
         };
       }
 
@@ -113,7 +112,7 @@ export class ScanResultSerializer {
         if (!isValidScanResult(parsed[i])) {
           return {
             success: false,
-            error: `Invalid ScanResult at index ${i}: missing or invalid required fields (value, codeType, timestamp)`,
+            error: `索引 ${i} 处的 ScanResult 无效：缺少或无效的必需字段（value、codeType、timestamp）`,
           };
         }
 
@@ -129,10 +128,10 @@ export class ScanResultSerializer {
         data: results,
       };
     } catch (e) {
-      const errorMessage = e instanceof Error ? e.message : 'Unknown parsing error';
+      const errorMessage = e instanceof Error ? e.message : '未知解析错误';
       return {
         success: false,
-        error: `JSON parsing failed: ${errorMessage}`,
+        error: `JSON 解析失败：${errorMessage}`,
       };
     }
   }

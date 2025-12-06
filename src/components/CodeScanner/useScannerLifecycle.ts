@@ -1,6 +1,6 @@
 /**
  * useScannerLifecycle Hook
- * Manages scanner lifecycle based on app state and navigation focus
+ * 管理扫码器生命周期，基于 App 状态和导航焦点
  */
 
 import { useFocusEffect } from '@react-navigation/native';
@@ -11,11 +11,11 @@ import type { AppStateStatus } from 'react-native';
 
 export interface IUseScannerLifecycleOptions {
   /** 是否启用 App 状态监听，默认 true */
-  enableAppStateListener?: boolean;
+  isAppStateListenerEnabled?: boolean;
   /** 是否启用导航焦点监听，默认 true */
-  enableFocusListener?: boolean;
+  isFocusListenerEnabled?: boolean;
   /** 外部暂停状态（用户手动控制） */
-  externalPaused?: boolean;
+  isExternalPaused?: boolean;
 }
 
 export interface IUseScannerLifecycleReturn {
@@ -28,29 +28,34 @@ export interface IUseScannerLifecycleReturn {
 }
 
 /**
- * Hook to manage scanner lifecycle based on app state and navigation focus
- * @param options - Configuration options
- * @returns Lifecycle state and computed shouldPause value
+ * 管理扫码器生命周期的 Hook
+ * @param options - 配置选项
+ * @returns 生命周期状态和计算后的 shouldPause 值
  */
 export function useScannerLifecycle(
   options?: IUseScannerLifecycleOptions,
 ): IUseScannerLifecycleReturn {
   const {
-    enableAppStateListener = true,
-    enableFocusListener = true,
-    externalPaused = false,
+    isAppStateListenerEnabled = true,
+    isFocusListenerEnabled = true,
+    isExternalPaused = false,
   } = options ?? {};
 
-  // Track app active state
-  const [isAppActive, setIsAppActive] = useState<boolean>(AppState.currentState === 'active');
+  // 跟踪 App 是否在前台
+  const [isAppActive, setIsAppActive] = useState<boolean>(() => {
+    // 如果禁用监听，默认为 true
+    if (!isAppStateListenerEnabled) {
+      return true;
+    }
+    return AppState.currentState === 'active';
+  });
 
-  // Track navigation focus state
+  // 跟踪页面是否有焦点
   const [isFocused, setIsFocused] = useState<boolean>(true);
 
-  // Handle AppState changes
+  // 处理 App 状态变化
   useEffect(() => {
-    if (!enableAppStateListener) {
-      setIsAppActive(true);
+    if (!isAppStateListenerEnabled) {
       return;
     }
 
@@ -63,28 +68,27 @@ export function useScannerLifecycle(
     return () => {
       subscription.remove();
     };
-  }, [enableAppStateListener]);
+  }, [isAppStateListenerEnabled]);
 
-  // Handle navigation focus changes
+  // 处理导航焦点变化
   useFocusEffect(
     useCallback(() => {
-      if (!enableFocusListener) {
-        setIsFocused(true);
+      if (!isFocusListenerEnabled) {
         return;
       }
 
-      // Screen is focused
+      // 页面获得焦点
       setIsFocused(true);
 
       return () => {
-        // Screen is unfocused
+        // 页面失去焦点
         setIsFocused(false);
       };
-    }, [enableFocusListener]),
+    }, [isFocusListenerEnabled]),
   );
 
-  // Compute shouldPause based on all factors
-  const shouldPause = externalPaused || !isAppActive || !isFocused;
+  // 综合计算是否应该暂停扫码
+  const shouldPause = isExternalPaused || !isAppActive || !isFocused;
 
   return {
     shouldPause,

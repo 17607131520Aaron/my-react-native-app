@@ -1,17 +1,17 @@
 /**
- * CodeScanner Module
- * A comprehensive barcode/QR code scanner component for React Native
+ * CodeScanner 模块
+ * React Native 的综合条形码/二维码扫描组件
  *
  * @module CodeScanner
  */
 
-// Main component
+// 主组件
 export { CodeScanner, default } from './CodeScanner';
 
-// UI Components
+// UI 组件
 export { ScanFrame } from './ScanFrame';
 
-// Core modules
+// 核心模块
 export { ScanCache } from './ScanCache';
 export { ScanThrottle } from './ScanThrottle';
 export { ScanResultSerializer } from './ScanResultSerializer';
@@ -25,7 +25,7 @@ export type {
   IUseScannerLifecycleReturn,
 } from './useScannerLifecycle';
 
-// Types
+// 类型
 export type {
   IScanResult,
   IScanCacheConfig,

@@ -1,24 +1,24 @@
 /**
- * ScanFrame Component
- * Visual scanning guide overlay for the CodeScanner
+ * ScanFrame 组件
+ * CodeScanner 的可视化扫描引导覆盖层
  */
 
 import React from 'react';
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
 interface IScanFrameProps {
-  /** Custom style for the scan frame */
+  /** 扫描框的自定义样式 */
   style?: ViewStyle;
 }
 
 /**
- * ScanFrame component displays a visual scanning guide
+ * ScanFrame 组件显示可视化扫描引导
  */
 export const ScanFrame: React.FC<IScanFrameProps> = ({ style }) => {
   return (
     <View pointerEvents='none' style={styles.overlay}>
       <View style={[styles.frame, style]}>
-        {/* Corner indicators */}
+        {/* 角落指示器 */}
         <View style={[styles.corner, styles.topLeft]} />
         <View style={[styles.corner, styles.topRight]} />
         <View style={[styles.corner, styles.bottomLeft]} />
