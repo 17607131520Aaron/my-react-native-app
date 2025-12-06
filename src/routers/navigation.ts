@@ -5,8 +5,8 @@
 
 import { getRouteModule, type IAllRoutesParamList } from './index';
 
-import type { NavigationProp } from '@react-navigation/native';
 import type { IRootStackParamList } from './types';
+import type { NavigationProp } from '@react-navigation/native';
 
 /**
  * 导航器类型
@@ -73,8 +73,5 @@ export function useNavigationHelper(navigation: TRootNavigationProp): {
 }
 
 // ==================== 兼容性别名 ====================
-/**
- * 为了保持向后兼容，导出不带 T 前缀的别名
- */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type RootNavigationProp = TRootNavigationProp;

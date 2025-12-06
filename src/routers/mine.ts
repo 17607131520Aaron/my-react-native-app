@@ -6,14 +6,9 @@
 import AboutPage from '~/pages/About';
 import LoginPage from '~/pages/Login';
 
+import type { IMineStackParamList } from './types';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import type { ComponentType } from 'react';
-import type { IMineStackParamList } from './types';
-
-// 导入页面组件
-// import MineHomePage from '~/pages/Mine/Home';
-// import MineProfilePage from '~/pages/Mine/Profile';
-// import MineSettingsPage from '~/pages/Mine/Settings';
 
 /**
  * 路由配置项
@@ -45,30 +40,6 @@ export const mineRoutes: IMineRouteConfig[] = [
       headerShown: true,
     },
   },
-  // {
-  //   name: 'MineHome',
-  //   component: MineHomePage,
-  //   options: {
-  //     title: '我的',
-  //     headerShown: true,
-  //   },
-  // },
-  // {
-  //   name: 'MineProfile',
-  //   component: MineProfilePage,
-  //   options: {
-  //     title: '个人资料',
-  //     headerShown: true,
-  //   },
-  // },
-  // {
-  //   name: 'MineSettings',
-  //   component: MineSettingsPage,
-  //   options: {
-  //     title: '设置',
-  //     headerShown: true,
-  //   },
-  // },
 ];
 
 /**

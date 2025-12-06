@@ -6,8 +6,8 @@
 import { engineerDefaultOptions, engineerRoutes } from './engineer';
 import { institutionDefaultOptions, institutionRoutes } from './institution';
 import { mineDefaultOptions, mineRoutes } from './mine';
-import type { IAllRoutesParamList, IRootStackParamList } from './types';
 
+import type { IAllRoutesParamList, IRootStackParamList } from './types';
 import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import type { ComponentType } from 'react';
 
