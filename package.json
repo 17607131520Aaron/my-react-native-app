@@ -9,7 +9,8 @@
     "start": "react-native start",
     "test": "jest",
     "updateApp": "python scripts/update_app.py",
-    "release:android": "python scripts/build_android.py --release"
+    "release:android": "python scripts/build_android.py --release",
+    "generateKeystore": "python scripts/generate_keystore.py"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
