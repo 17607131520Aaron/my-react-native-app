@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ErrorBoundary, NavigationBar, SplashScreen } from '~/components/shared';
-import { getAllRoutes, type IRootStackParamList, IRouteConfig } from '~/routers';
+import { getAllRoutes, type IRootStackParamList, type IRouteConfig } from '~/routers';
 import { navigationRef } from '~/routers/navigation';
 import { ThemeProvider } from '~/theme';
 
