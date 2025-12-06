@@ -11,7 +11,7 @@ import { useTheme } from '~/theme';
 const InstitutionHomePage: React.FC = () => {
   const { theme } = useTheme();
 
-  const handleScanInbound = () => {
+  const handleScanInbound = (): void => {
     navigateTo('ScanInboundPage', {});
   };
 
@@ -23,7 +23,7 @@ const InstitutionHomePage: React.FC = () => {
         style={[styles.button, { backgroundColor: theme.colors.primary }]}
         onPress={handleScanInbound}
       >
-        <Text style={styles.buttonText}>📦 扫码入库</Text>
+        <Text style={[styles.buttonText, { color: theme.colors.background }]}>📦 扫码入库</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   buttonText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: '600',
   },

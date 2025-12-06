@@ -51,8 +51,6 @@ const ScanInboundPage: React.FC = () => {
 
   // 处理扫码结果
   const handleScan = useCallback((result: IScanResult) => {
-    console.log(result, 'result');
-
     const snCode = result.value;
 
     // 查找需要扫描SN的商品

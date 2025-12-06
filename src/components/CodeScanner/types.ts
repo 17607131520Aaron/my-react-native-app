@@ -3,6 +3,8 @@
  * Core type definitions for the CodeScanner component
  */
 
+import type { ViewStyle } from 'react-native';
+
 /**
  * Represents the result of a successful scan
  * @property value - The scanned code value
@@ -80,7 +82,7 @@ export interface ICodeScannerProps {
   /** 是否显示扫描框，默认 true */
   showScanFrame?: boolean;
   /** 扫描框样式 */
-  scanFrameStyle?: import('react-native').ViewStyle;
+  scanFrameStyle?: ViewStyle;
   /** 容器样式 */
-  style?: import('react-native').ViewStyle;
+  style?: ViewStyle;
 }

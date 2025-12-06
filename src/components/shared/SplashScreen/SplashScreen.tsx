@@ -68,6 +68,8 @@ export const SplashScreen: React.FC<ISplashScreenProps> = ({
   );
 };
 
+// 启动屏使用固定颜色，不依赖主题（因为主题可能还未加载）
+/* eslint-disable react-native/no-color-literals */
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -145,5 +147,6 @@ const styles = StyleSheet.create({
     color: '#C7C7CC',
   },
 });
+/* eslint-enable react-native/no-color-literals */
 
 export default SplashScreen;

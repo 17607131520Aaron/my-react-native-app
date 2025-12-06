@@ -23,7 +23,7 @@ export const getApiConfig = (): IApiConfig => ({
 /**
  * 获取当前环境
  */
-export const getEnvironment = () => ENV.ENV;
+export const getEnvironment = (): string => ENV.ENV;
 
 // 其他全局配置
 export const APP_CONFIG = {

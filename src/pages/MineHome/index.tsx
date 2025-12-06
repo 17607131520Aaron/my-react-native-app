@@ -13,15 +13,15 @@ const MineHomePage: React.FC = () => {
   const { theme } = useTheme();
   const { profile, isAuthenticated, logout } = useUserStore();
 
-  const handleLogin = () => {
+  const handleLogin = (): void => {
     navigateTo('Login');
   };
 
-  const handleAbout = () => {
+  const handleAbout = (): void => {
     navigateTo('About');
   };
 
-  const handleLogout = () => {
+  const handleLogout = (): void => {
     logout();
   };
 
@@ -30,7 +30,7 @@ const MineHomePage: React.FC = () => {
       <View style={styles.header}>
         <Text style={styles.avatar}>👤</Text>
         <Text style={[styles.name, { color: theme.colors.text }]}>
-          {isAuthenticated ? profile?.name || '用户' : '未登录'}
+          {isAuthenticated ? profile?.name ?? '用户' : '未登录'}
         </Text>
       </View>
 

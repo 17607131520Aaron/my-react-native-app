@@ -89,6 +89,22 @@ class Logger implements ILogger {
     this.minLevel = level;
   }
 
+  debug(message: string, context?: Record<string, unknown>): void {
+    this.log('debug', message, context);
+  }
+
+  info(message: string, context?: Record<string, unknown>): void {
+    this.log('info', message, context);
+  }
+
+  warn(message: string, context?: Record<string, unknown>): void {
+    this.log('warn', message, context);
+  }
+
+  error(message: string, context?: Record<string, unknown>): void {
+    this.log('error', message, context);
+  }
+
   /**
    * 检查日志级别是否应该输出
    */
@@ -140,22 +156,6 @@ class Logger implements ILogger {
           break;
       }
     }
-  }
-
-  debug(message: string, context?: Record<string, unknown>): void {
-    this.log('debug', message, context);
-  }
-
-  info(message: string, context?: Record<string, unknown>): void {
-    this.log('info', message, context);
-  }
-
-  warn(message: string, context?: Record<string, unknown>): void {
-    this.log('warn', message, context);
-  }
-
-  error(message: string, context?: Record<string, unknown>): void {
-    this.log('error', message, context);
   }
 }
 

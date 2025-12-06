@@ -69,6 +69,7 @@ export interface IMineStackParamList {
  * 将所有模块的路由合并为一个扁平化的路由参数列表
  * 支持直接根据路由名称跳转，无需指定模块
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export type IAllRoutesParamList = IEngineerStackParamList &
   IInstitutionStackParamList &
   IMineStackParamList;

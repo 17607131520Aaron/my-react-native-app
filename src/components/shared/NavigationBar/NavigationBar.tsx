@@ -80,7 +80,13 @@ export const NavigationBar: React.FC<INavigationBarProps> = ({
     // 搜索框模式
     if (searchConfig) {
       return (
-        <View style={[styles.searchContainer, searchConfig.style]}>
+        <View
+          style={[
+            styles.searchContainer,
+            { backgroundColor: theme.colors.surface },
+            searchConfig.style,
+          ]}
+        >
           <View style={styles.searchIconContainer}>
             <SearchIcon color={theme.colors.textSecondary} size={16} />
           </View>
@@ -91,6 +97,7 @@ export const NavigationBar: React.FC<INavigationBarProps> = ({
             returnKeyType='search'
             style={[styles.searchInput, { color: textColor }]}
             value={searchConfig.value}
+            // eslint-disable-next-line react/jsx-handler-names
             onChangeText={searchConfig.onChangeText}
             onSubmitEditing={() => searchConfig.onSubmit?.(searchConfig.value ?? '')}
           />
@@ -130,6 +137,7 @@ export const NavigationBar: React.FC<INavigationBarProps> = ({
               activeOpacity={0.7}
               disabled={button.disabled}
               style={[styles.rightButton, button.disabled && styles.buttonDisabled, button.style]}
+              // eslint-disable-next-line react/jsx-handler-names
               onPress={button.onPress}
             >
               {button.icon}
@@ -210,7 +218,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F2F2F7',
     borderRadius: 10,
     paddingHorizontal: 10,
     height: 36,
