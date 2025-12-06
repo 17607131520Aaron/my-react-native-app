@@ -220,7 +220,7 @@ def copy_apk_to_output(release: bool = False) -> list:
 
     # 复制所有 APK 文件
     copied_files = []
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
     for apk_file in apk_dir.glob('*.apk'):
         # 保留原文件名，添加时间戳
