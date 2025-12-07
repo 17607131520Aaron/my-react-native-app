@@ -81,3 +81,11 @@ android/app/src/main/assets/index.android.bundle.meta
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Android 签名文件
+android/app/release.keystore
+android/keystore.properties
+
+# Python
+__pycache__/
+*.py[cod]

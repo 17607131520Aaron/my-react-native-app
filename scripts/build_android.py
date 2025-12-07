@@ -17,6 +17,8 @@ import sys
 import subprocess
 import shutil
 import argparse
+import secrets
+import string
 from pathlib import Path
 from datetime import datetime
 
@@ -24,6 +26,86 @@ from datetime import datetime
 def get_project_root() -> Path:
     """获取项目根目录"""
     return Path(__file__).parent.parent
+
+
+def generate_password(length: int = 16) -> str:
+    """生成随机密码"""
+    alphabet = string.ascii_letters + string.digits
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+
+def generate_keystore():
+    """生成新的签名密钥（每次构建都生成新的）"""
+    print('🔐 生成签名密钥...')
+    project_root = get_project_root()
+    android_dir = project_root / 'android'
+    app_dir = android_dir / 'app'
+
+    keystore_path = app_dir / 'release.keystore'
+    config_path = android_dir / 'keystore.properties'
+
+    # 删除旧的 keystore（如果存在）
+    if keystore_path.exists():
+        keystore_path.unlink()
+        print('  🗑️ 已删除旧的签名文件')
+
+    # 清理 Gradle 签名相关缓存，避免使用旧密码
+    app_build_dir = app_dir / 'build'
+    if app_build_dir.exists():
+        shutil.rmtree(app_build_dir)
+        print('  🗑️ 已清理 app/build 缓存')
+
+    # 检查 keytool
+    try:
+        subprocess.run(['keytool', '-help'], capture_output=True)
+    except FileNotFoundError:
+        print('❌ keytool 未找到，请确保已安装 JDK')
+        print('   macOS: brew install openjdk')
+        sys.exit(1)
+
+    # 生成密码 (PKCS12 要求 store 和 key 密码相同)
+    store_password = generate_password()
+    key_password = store_password  # PKCS12 格式必须使用相同密码
+    key_alias = 'release-key'
+
+    # 默认证书信息
+    dname = 'CN=Developer, OU=Development, O=MyCompany, L=Beijing, ST=Beijing, C=CN'
+
+    # 生成 keystore
+    cmd = [
+        'keytool', '-genkeypair',
+        '-v',
+        '-storetype', 'PKCS12',
+        '-keystore', str(keystore_path),
+        '-alias', key_alias,
+        '-keyalg', 'RSA',
+        '-keysize', '2048',
+        '-validity', '10000',
+        '-storepass', store_password,
+        '-keypass', key_password,
+        '-dname', dname,
+    ]
+
+    result = subprocess.run(cmd, capture_output=True, text=True)
+
+    if result.returncode != 0:
+        print(f'❌ 签名生成失败: {result.stderr}')
+        sys.exit(1)
+
+    print(f'  ✅ 签名文件已生成: {keystore_path}')
+
+    # 生成配置文件
+    config_content = f"""# Android Release 签名配置
+# ⚠️ 此文件包含敏感信息，请勿提交到 Git
+
+storeFile=release.keystore
+storePassword={store_password}
+keyAlias={key_alias}
+keyPassword={key_password}
+"""
+
+    config_path.write_text(config_content)
+    print(f'  ✅ 配置文件已生成: {config_path}\n')
 
 
 def check_environment():
@@ -297,17 +379,21 @@ def main():
     if args.clean:
         clean_build()
 
-    # 5. 构建 JS Bundle（Release 模式需要）
+    # 5. 生成签名密钥（Release 模式需要，每次都生成新的）
+    if args.release:
+        generate_keystore()
+
+    # 6. 构建 JS Bundle（Release 模式需要）
     if args.release:
         build_bundle()
 
-    # 6. 构建 APK
+    # 7. 构建 APK
     build_apk(args.release)
 
-    # 7. 复制到输出目录
+    # 8. 复制到输出目录
     output_files = copy_apk_to_output(args.release)
 
-    # 8. 安装到设备（可选）
+    # 9. 安装到设备（可选）
     if args.install:
         install_apk(args.release)
 
