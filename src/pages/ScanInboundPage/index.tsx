@@ -49,20 +49,18 @@ const ScanInboundPage: React.FC = () => {
   const [torchMode, setTorchMode] = useState<'on' | 'off'>('off');
   const [products, setProducts] = useState<IProduct[]>(mockProducts);
 
-  // 处理扫码结果
+  // 处理扫码结果 - 测试模式：允许无限录入，不检查重复和数量限制
   const handleScan = useCallback((result: IScanResult) => {
     const snCode = result.value;
 
-    // 查找需要扫描SN的商品
+    // 测试模式：直接添加到第一个需要SN的商品，不做任何限制
     setProducts((prev) => {
       const updated = [...prev];
       for (const product of updated) {
-        if (product.requireSN && product.scannedSNs.length < product.requiredSNCount) {
-          // 检查是否已扫描过
-          if (!product.scannedSNs.includes(snCode)) {
-            product.scannedSNs = [...product.scannedSNs, snCode];
-            return updated;
-          }
+        if (product.requireSN) {
+          // 直接添加，不检查重复和数量限制
+          product.scannedSNs = [...product.scannedSNs, snCode];
+          return updated;
         }
       }
       return prev;
