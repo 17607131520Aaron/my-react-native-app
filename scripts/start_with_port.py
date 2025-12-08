@@ -6,6 +6,9 @@
     python scripts/start_with_port.py start      # 启动 Metro bundler
     python scripts/start_with_port.py android    # 运行 Android 应用
     python scripts/start_with_port.py ios        # 运行 iOS 应用
+
+配置:
+    在脚本顶部的 CONFIG 中设置 JAVA_HOME 路径，留空则使用系统默认 Java
 """
 
 import os
@@ -13,6 +16,15 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+
+# ============ 配置区域 ============
+CONFIG = {
+    # 指定 Java 路径，留空则使用系统默认
+    # 例如: "JAVA_HOME": "/opt/homebrew/Cellar/openjdk@17/17.0.15/libexec/openjdk.jdk/Contents/Home",
+    # "JAVA_HOME": "",
+     "JAVA_HOME": "/opt/homebrew/Cellar/openjdk@17/17.0.15/libexec/openjdk.jdk/Contents/Home",
+}
+# =================================
 
 
 def get_project_root() -> Path:
@@ -43,11 +55,33 @@ def read_metro_port() -> int:
     return 8081
 
 
-def run_command(command: list[str]) -> int:
+def get_env_with_java() -> dict:
+    """获取包含 Java 配置的环境变量"""
+    env = os.environ.copy()
+
+    java_home = CONFIG.get("JAVA_HOME", "").strip()
+    if java_home:
+        if not Path(java_home).exists():
+            print(f"警告: 指定的 JAVA_HOME 路径不存在: {java_home}")
+            print("将使用系统默认 Java")
+        else:
+            env["JAVA_HOME"] = java_home
+            # 将 Java bin 目录添加到 PATH 最前面
+            java_bin = str(Path(java_home) / "bin")
+            env["PATH"] = f"{java_bin}:{env.get('PATH', '')}"
+            print(f"使用指定 Java: {java_home}")
+
+    return env
+
+
+def run_command(command: list[str], use_java_env: bool = False) -> int:
     """运行命令并返回退出码"""
     print(f"执行命令: {' '.join(command)}")
+
+    env = get_env_with_java() if use_java_env else None
+
     try:
-        result = subprocess.run(command, cwd=get_project_root())
+        result = subprocess.run(command, cwd=get_project_root(), env=env)
         return result.returncode
     except KeyboardInterrupt:
         print("\n已取消")
@@ -61,7 +95,10 @@ def start_metro(port: int) -> int:
 
 def run_android(port: int) -> int:
     """运行 Android 应用"""
-    return run_command(["npx", "react-native", "run-android", "--port", str(port)])
+    return run_command(
+        ["npx", "react-native", "run-android", "--port", str(port)],
+        use_java_env=True
+    )
 
 
 def run_ios(port: int) -> int:
