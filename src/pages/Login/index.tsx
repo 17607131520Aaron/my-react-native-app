@@ -46,13 +46,9 @@ const mockProducts: IProduct[] = [
   },
 ];
 
-const ScanInboundPage: React.FC<IWithNavigationBarProps> = ({ navBar }) => {
+const ScanInboundPage: React.FC<IWithNavigationBarProps> = () => {
   const [torchMode] = useState<'on' | 'off'>('off');
   const [products, setProducts] = useState<IProduct[]>(mockProducts);
-
-  useEffect(() => {
-    navBar.setTitle('使用新的扫码组件V1.2');
-  }, [navBar]);
 
   // 处理扫码结果 - 测试模式：允许无限录入，不检查重复和数量限制
   const handleScan = useCallback((result: IScanResult) => {
