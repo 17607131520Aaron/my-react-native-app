@@ -22,3 +22,15 @@ export {
 } from './NavigationBar';
 
 export { SplashScreen, type ISplashScreenProps } from './SplashScreen';
+
+// ScanCode 扫码组件
+export {
+  ScanCode,
+  type IScanCodeProps,
+  type IScanResult,
+  type IScanArea,
+  type CodeType,
+  DEFAULT_CODE_TYPES,
+  DEFAULT_SCAN_INTERVAL,
+  DEFAULT_CACHE_TIMEOUT,
+} from '../ScanCode';
