@@ -3,10 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "android": "python scripts/start_with_port.py android",
+    "ios": "python scripts/start_with_port.py ios",
     "lint": "eslint .",
-    "start": "react-native start",
+    "start": "python scripts/start_with_port.py start",
     "test": "jest",
     "updateApp": "python scripts/update_app.py",
     "release:android": "python scripts/build_android.py --release",
